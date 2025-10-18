@@ -1,0 +1,159 @@
+/**
+ * Purpose Identifier - Detects what code is trying to achieve
+ */
+export class PurposeIdentifier {
+  constructor(options = {}) {
+    this.patterns = this.loadPatterns();
+    this.confidenceThreshold = options.confidenceThreshold || 0.6;
+    this.debug = options.debug || false;
+  }
+
+  loadPatterns() {
+    return {
+      'data-validation': {
+        indicators: ['validate', 'check', 'verify', 'test', 'assert', 'ensure'],
+        patterns: [/if.*===/, /if.*!==/, /typeof/, /instanceof/, /regex/i, /pattern/i],
+        weight: 1.0,
+        description: 'Validates data format or constraints'
+      },
+      'data-transformation': {
+        indicators: ['map', 'filter', 'reduce', 'transform', 'convert', 'process'],
+        patterns: [/\.map\(/, /\.filter\(/, /\.reduce\(/, /=>\s*{/],
+        weight: 1.0,
+        description: 'Transforms data from one format to another'
+      },
+      'api-communication': {
+        indicators: ['fetch', 'api', 'request', 'http', 'axios', 'endpoint'],
+        patterns: [/fetch\(/, /axios\./, /\.get\(/, /\.post\(/, /XMLHttpRequest/],
+        weight: 0.9,
+        description: 'Handles API calls and network communication'
+      },
+      'state-management': {
+        indicators: ['state', 'setState', 'useState', 'redux', 'store', 'dispatch'],
+        patterns: [/useState\(/, /this\.state/, /dispatch\(/, /useReducer\(/],
+        weight: 0.8,
+        description: 'Manages application state'
+      },
+      'error-handling': {
+        indicators: ['catch', 'error', 'try', 'exception', 'throw'],
+        patterns: [/try\{/, /catch\(/, /throw new/, /Error\(/],
+        weight: 0.9,
+        description: 'Handles errors and exceptions'
+      },
+      'data-persistence': {
+        indicators: ['save', 'store', 'localStorage', 'database', 'db', 'insert'],
+        patterns: [/localStorage/, /sessionStorage/, /\.setItem\(/, /database/],
+        weight: 0.8,
+        description: 'Saves or retrieves persistent data'
+      },
+      'authentication': {
+        indicators: ['login', 'auth', 'token', 'password', 'user', 'session'],
+        patterns: [/token/, /password/, /login/, /auth/],
+        weight: 0.9,
+        description: 'Handles user authentication and authorization'
+      },
+      'utility': {
+        indicators: ['helper', 'util', 'utility', 'format', 'parse', 'calculate'],
+        patterns: [/function.*helper/, /const.*util/, /utils?\./],
+        weight: 0.7,
+        description: 'Provides utility functions'
+      }
+    };
+  }
+
+  async analyze(code, context = {}) {
+    if (!code || typeof code !== 'string') {
+      throw new Error('Code must be a non-empty string');
+    }
+
+    const analysis = {
+      purposes: [],
+      primaryPurpose: null,
+      confidence: 0,
+      details: {},
+      context: context
+    };
+
+    // Analyze for each purpose pattern
+    for (const [purpose, pattern] of Object.entries(this.patterns)) {
+      const score = this.calculatePurposeScore(code, pattern, context);
+      if (score >= this.confidenceThreshold) {
+        analysis.purposes.push({
+          purpose,
+          confidence: parseFloat(score.toFixed(2)),
+          indicators: this.findIndicators(code, pattern),
+          description: pattern.description
+        });
+      }
+    }
+
+    // Sort by confidence and determine primary purpose
+    analysis.purposes.sort((a, b) => b.confidence - a.confidence);
+    analysis.primaryPurpose = analysis.purposes[0] || null;
+    analysis.confidence = analysis.primaryPurpose ? analysis.primaryPurpose.confidence : 0;
+
+    if (this.debug) {
+      console.debug('Purpose analysis:', analysis);
+    }
+
+    return analysis;
+  }
+
+  calculatePurposeScore(code, pattern, context) {
+    let score = 0;
+    const normalizedCode = code.toLowerCase();
+    
+    // Check for indicator words
+    const indicatorMatches = pattern.indicators.filter(indicator => 
+      normalizedCode.includes(indicator.toLowerCase())
+    );
+    score += (indicatorMatches.length / pattern.indicators.length) * 0.4;
+
+    // Check for code patterns
+    const patternMatches = pattern.patterns.filter(regex => regex.test(code));
+    score += (patternMatches.length / pattern.patterns.length) * 0.6;
+
+    // Apply pattern weight
+    const weightedScore = score * pattern.weight;
+
+    return Math.min(weightedScore, 1.0);
+  }
+
+  findIndicators(code, pattern) {
+    const normalizedCode = code.toLowerCase();
+    return pattern.indicators.filter(indicator =>
+      normalizedCode.includes(indicator.toLowerCase())
+    );
+  }
+
+  async suggest(code, hints = []) {
+    const analysis = await this.analyze(code);
+    
+    // Enhance with hints if provided
+    if (hints.length > 0) {
+      hints.forEach(hint => {
+        analysis.purposes.forEach(p => {
+          if (hint.toLowerCase().includes(p.purpose)) {
+            // Boost confidence for hinted purposes
+            p.confidence = Math.min(p.confidence * 1.3, 1.0);
+          }
+        });
+      });
+      
+      // Re-sort after hint application
+      analysis.purposes.sort((a, b) => b.confidence - a.confidence);
+      analysis.primaryPurpose = analysis.purposes[0];
+      analysis.confidence = analysis.primaryPurpose ? analysis.primaryPurpose.confidence : 0;
+    }
+
+    return analysis;
+  }
+
+  getSupportedPurposes() {
+    return Object.keys(this.patterns).map(purpose => ({
+      purpose,
+      description: this.patterns[purpose].description
+    }));
+  }
+}
+

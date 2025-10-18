@@ -1,0 +1,34 @@
+{
+  "name": "insight-monorepo",
+  "version": "0.1.0",
+  "description": "A suite of intelligent development tools for understanding code",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "dev": "npm run dev --workspaces",
+    "clean": "rm -rf node_modules packages/*/node_modules"
+  },
+  "keywords": [
+    "code-analysis",
+    "developer-tools",
+    "static-analysis",
+    "ai",
+    "machine-learning"
+  ],
+  "author": "yusdesign",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusdesign/insight.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "point.js": "^0.1.0"
+  }
+}
