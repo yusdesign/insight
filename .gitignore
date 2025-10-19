@@ -30,6 +30,7 @@ Thumbs.db
 # Lerna
 lerna-debug.log*
 
-# Temporal extensions
-.jts
-.jtson
+# Temporal extensions and Shell scripts
+*.jts
+*.jtson
+*.sh
