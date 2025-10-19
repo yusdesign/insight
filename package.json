@@ -29,6 +29,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "hunch.js": "^0.1.0",
     "point.js": "^0.1.0"
   }
 }

@@ -30,7 +30,11 @@ Thumbs.db
 # Lerna
 lerna-debug.log*
 
+<<<<<<< Updated upstream
 # Temporal extensions and Shell scripts
+=======
+# Temporal and script files
+>>>>>>> Stashed changes
 *.jts
 *.jtson
 *.sh
