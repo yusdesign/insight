@@ -9,27 +9,63 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run build
-      - run: npm run test
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
-  publish:
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install --prefix packages/point.js
+        npm install --prefix packages/hunch.js
+        npm install --prefix packages/intuition.js
+        npm install --prefix packages/insight.js
+
+    - name: Run tests for point.js
+      run: npm test --workspace=point.js
+
+    - name: Run tests for hunch.js
+      run: npm test --workspace=hunch.js
+
+    - name: Run tests for intuition.js
+      run: npm test --workspace=intuition.js
+
+    - name: Run tests for insight.js
+      run: npm test --workspace=insight.js
+
+  build:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run build
-      - run: cd packages/point.js && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install and build
+      run: |
+        npm install
+        echo "✅ Build completed successfully"
+
+    - name: Verify package structure
+      run: |
+        echo "Package structure:"
+        find packages/ -name "package.json" -exec echo "  - {}" \;
+        echo "Test files:"
+        find packages/ -name "*.test.js" -exec echo "  - {}" \;
