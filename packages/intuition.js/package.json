@@ -1,0 +1,26 @@
+{
+  "name": "intuition.js",
+  "version": "0.1.0",
+  "description": "Pattern recognition and learning for your codebase",
+  "type": "module", 
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node tests/basic.test.js",
+    "example": "node examples/basic-usage.js",
+    "dev": "node examples/basic-usage.js"
+  },
+  "keywords": [
+    "code-analysis",
+    "pattern-recognition",
+    "machine-learning",
+    "code-patterns",
+    "insight"
+  ],
+  "author": "yusdesign",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusdesign/insight.git",
+    "directory": "packages/intuition.js"
+  }
+}
