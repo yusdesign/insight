@@ -1,0 +1,26 @@
+{
+  "name": "hunch.js",
+  "version": "0.1.0",
+  "description": "Trust your code's gut feelings - Anomaly and pattern detection",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node tests/basic.test.js",
+    "example": "node examples/basic-usage.js",
+    "dev": "node examples/basic-usage.js"
+  },
+  "keywords": [
+    "code-analysis",
+    "anomaly-detection",
+    "pattern-matching",
+    "code-smells",
+    "insight"
+  ],
+  "author": "yusdesign",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusdesign/insight.git",
+    "directory": "packages/hunch.js"
+  }
+}
