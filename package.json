@@ -7,8 +7,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
+    "test:point": "npm test --workspace=point.js",
+    "test:hunch": "npm test --workspace=hunch.js",
+    "test:intuition": "npm test --workspace=intuition.js",
+    "test:insight": "npm test --workspace=insight.js",
+    "build": "echo 'No build step needed for now'",
     "dev": "npm run dev --workspaces",
     "clean": "rm -rf node_modules packages/*/node_modules"
   },
@@ -25,11 +29,10 @@
     "type": "git",
     "url": "https://github.com/yusdesign/insight.git"
   },
+  "devDependencies": {
+    "lerna": "^6.0.0"
+  },
   "engines": {
     "node": ">=16.0.0"
-  },
-  "dependencies": {
-    "hunch.js": "^0.1.0",
-    "point.js": "^0.1.0"
   }
 }
