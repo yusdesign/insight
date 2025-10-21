@@ -1,7 +1,7 @@
 {
-  "name": "insight.js",
+  "name": "intuition.js",
   "version": "1.0.0",
-  "description": "Holistic code analysis and insight generation",
+  "description": "Pattern recognition and learning for your codebase",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
@@ -13,22 +13,19 @@
   },
   "keywords": [
     "code-analysis",
-    "holistic",
-    "insight",
-    "architecture",
-    "code-quality",
-    "ai"
+    "pattern-recognition",
+    "machine-learning",
+    "code-patterns",
+    "insight"
   ],
   "author": "yusdesign",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/yusdesign/insight.git",
-    "directory": "packages/insight.js"
+    "directory": "packages/intuition.js"
   },
   "dependencies": {
-    "esbuild": "^0.25.11",
-    "esbuild-node-externals": "^1.18.0",
     "stemmer": "^2.0.1",
     "stopword": "^3.1.5"
   },

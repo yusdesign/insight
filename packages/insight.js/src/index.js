@@ -1,278 +1,350 @@
-// Import all cognitive layers
-import PointJS from 'point.js';
-import HunchJS from 'hunch.js'; 
-import IntuitionJS from 'intuition.js';
+import { HolisticAnalyzer } from './core/analyzer.js';
+import { CorrelationEngine } from './core/correlator.js';
 
-/**
- * Insight.js - Holistic code understanding and synthesis
- * The complete Insight experience combining all cognitive layers
- */
-class InsightJS {
-  constructor(options = {}) {
-    this.point = new PointJS(options.point || {});
-    this.hunch = new HunchJS(options.hunch || {});
-    this.intuition = new IntuitionJS(options.intuition || {});
-    this.version = '0.1.0';
+export default class InsightJS {
+  constructor(config = {}) {
+    this.config = {
+      depth: config.depth || 'medium', // 'quick', 'medium', 'deep'
+      includeSuggestions: config.includeSuggestions !== false,
+      debug: config.debug || false,
+      crossPackageAnalysis: config.crossPackageAnalysis || true,
+      ...config
+    };
     
-    this.weights = {
-      purpose: options.weights?.purpose || 0.3,
-      anomalies: options.weights?.anomalies || 0.3, 
-      patterns: options.weights?.patterns || 0.2,
-      relationships: options.weights?.relationships || 0.2
-    };
-  }
-
-  /**
-   * Complete holistic analysis of code
-   * @param {string} code - The code to analyze
-   * @param {object} context - Additional context
-   * @returns {Promise<object>} Comprehensive insight analysis
-   */
-  async understand(code, context = {}) {
-    console.log('🔍 Starting holistic code analysis...');
+    this.analyzer = new HolisticAnalyzer(this.config);
+    this.correlator = new CorrelationEngine(this.config);
     
-    // Run all cognitive layers in parallel
-    const [purposeAnalysis, anomalyAnalysis, patternAnalysis] = await Promise.all([
-      this.point.identify(code, context),
-      this.hunch.detectAnomalies(code),
-      this.intuition.recognizePatterns(code)
-    ]);
-
-    // Synthesize insights from all layers
-    const synthesis = this.synthesizeInsights({
-      purpose: purposeAnalysis,
-      anomalies: anomalyAnalysis, 
-      patterns: patternAnalysis
-    }, code);
-
-    return {
-      synthesis,
-      layers: {
-        point: purposeAnalysis,
-        hunch: anomalyAnalysis,
-        intuition: patternAnalysis
-      },
-      overallScore: this.calculateOverallScore(synthesis),
-      recommendations: this.generateRecommendations(synthesis),
-      confidence: synthesis.confidence
-    };
+    if (this.config.debug) {
+      console.log('🔧 Insight.js initialized with config:', this.config);
+    }
   }
 
   /**
-   * Synthesize insights from all cognitive layers
+   * Perform holistic analysis of code
    */
-  synthesizeInsights(layerResults, code) {
-    const synthesis = {
-      purpose: layerResults.purpose.primaryPurpose?.purpose || 'unknown',
-      purposeConfidence: layerResults.purpose.confidence || 0,
+  async analyze(code, context = {}) {
+    try {
+      const analysis = await this.analyzer.comprehensiveAnalysis(code, context);
       
-      anomalyCount: layerResults.anomalies.anomalies.length,
-      criticalAnomalies: layerResults.anomalies.anomalies.filter(a => a.severity === 'high'),
-      anomalyConfidence: layerResults.anomalies.confidence || 0,
+      if (this.config.debug) {
+        console.log('🎯 Holistic analysis completed:', analysis.summary);
+      }
       
-      patternCount: layerResults.patterns.recognizedPatterns.length,
-      primaryPattern: layerResults.patterns.recognizedPatterns[0] || null,
-      patternConfidence: layerResults.patterns.confidence || 0,
-      
-      codeComplexity: this.estimateComplexity(code),
-      clarityScore: this.estimateClarity(layerResults),
-      maintainability: this.estimateMaintainability(layerResults),
-      
-      confidence: 0
-    };
-
-    // Calculate overall confidence
-    synthesis.confidence = (
-      synthesis.purposeConfidence * this.weights.purpose +
-      synthesis.anomalyConfidence * this.weights.anomalies + 
-      synthesis.patternConfidence * this.weights.patterns
-    );
-
-    return synthesis;
+      return analysis;
+    } catch (error) {
+      console.error('❌ Holistic analysis failed:', error);
+      return this.getFallbackAnalysis();
+    }
   }
 
   /**
-   * Calculate overall code quality score
+   * Analyze code relationships and dependencies
    */
-  calculateOverallScore(synthesis) {
-    let score = 100;
-
-    // Deduct for anomalies
-    score -= synthesis.anomalyCount * 5;
-    score -= synthesis.criticalAnomalies.length * 15;
-
-    // Boost for clear purpose
-    score += synthesis.purposeConfidence * 10;
-
-    // Adjust for complexity
-    score -= synthesis.codeComplexity * 2;
-
-    // Boost for recognized patterns (indicates good practices)
-    score += synthesis.patternCount * 3;
-
-    return Math.max(0, Math.min(100, score));
+  async analyzeRelationships(codeSnippets, options = {}) {
+    try {
+      const relationships = await this.correlator.findRelationships(codeSnippets, options);
+      
+      return {
+        relationships,
+        insights: this.extractRelationshipInsights(relationships),
+        confidence: this.calculateRelationshipConfidence(relationships)
+      };
+    } catch (error) {
+      console.error('❌ Relationship analysis failed:', error);
+      return { relationships: [], insights: [], confidence: 0.1 };
+    }
   }
 
   /**
-   * Generate actionable recommendations
+   * Generate comprehensive insights report
    */
-  generateRecommendations(synthesis) {
+  async generateReport(code, context = {}) {
+    try {
+      const analysis = await this.analyze(code, context);
+      const insights = await this.extractKeyInsights(analysis);
+      
+      return {
+        summary: this.generateExecutiveSummary(insights),
+        keyFindings: insights.keyFindings,
+        recommendations: insights.recommendations,
+        metrics: analysis.metrics,
+        confidence: analysis.confidence
+      };
+    } catch (error) {
+      console.error('❌ Report generation failed:', error);
+      return this.getFallbackReport();
+    }
+  }
+
+  /**
+   * Compare multiple code versions or approaches
+   */
+  async compareVersions(versions, criteria = ['quality', 'maintainability', 'performance']) {
+    try {
+      const comparisons = await this.analyzer.compareCodeVersions(versions, criteria);
+      
+      return {
+        comparisons,
+        bestVersion: this.determineBestVersion(comparisons),
+        differences: this.analyzeDifferences(comparisons),
+        confidence: Math.min(comparisons.confidence * 1.1, 0.95)
+      };
+    } catch (error) {
+      console.error('❌ Version comparison failed:', error);
+      return { comparisons: [], bestVersion: null, differences: [], confidence: 0.1 };
+    }
+  }
+
+  /**
+   * Detect architectural patterns and anti-patterns
+   */
+  async detectPatterns(code, patternTypes = []) {
+    try {
+      const patterns = await this.analyzer.detectArchitecturalPatterns(code, patternTypes);
+      
+      return {
+        patterns: patterns.detected,
+        antiPatterns: patterns.antiPatterns,
+        recommendations: patterns.recommendations,
+        confidence: patterns.confidence
+      };
+    } catch (error) {
+      console.error('❌ Pattern detection failed:', error);
+      return { patterns: [], antiPatterns: [], recommendations: [], confidence: 0.1 };
+    }
+  }
+
+  /**
+   * Extract key insights from analysis results
+   */
+  async extractKeyInsights(analysis) {
+    const keyFindings = [];
     const recommendations = [];
 
-    if (synthesis.purposeConfidence < 0.5) {
-      recommendations.push({
-        priority: 'high',
+    // Extract purpose insights
+    if (analysis.purpose) {
+      keyFindings.push({
         category: 'purpose',
-        message: 'Code purpose is unclear - consider adding comments or refactoring for clarity',
-        action: 'Improve code documentation and naming'
+        insight: `Primary purpose: ${analysis.purpose.primaryPurpose.purpose}`,
+        confidence: analysis.purpose.confidence,
+        impact: 'high'
       });
     }
 
-    if (synthesis.criticalAnomalies.length > 0) {
-      recommendations.push({
-        priority: 'high', 
-        category: 'quality',
-        message: `Found ${synthesis.criticalAnomalies.length} critical code smells that need immediate attention`,
-        action: 'Address high-severity anomalies identified by hunch.js'
+    // Extract quality insights
+    if (analysis.quality && analysis.quality.anomalies.length > 0) {
+      const highSeverityIssues = analysis.quality.anomalies.filter(a => a.severity === 'high');
+      if (highSeverityIssues.length > 0) {
+        keyFindings.push({
+          category: 'quality',
+          insight: `${highSeverityIssues.length} high-severity issues detected`,
+          confidence: analysis.quality.confidence,
+          impact: 'critical'
+        });
+        
+        recommendations.push({
+          type: 'quality',
+          action: 'Address high-severity issues immediately',
+          priority: 'high',
+          issues: highSeverityIssues.map(issue => issue.description)
+        });
+      }
+    }
+
+    // Extract maintainability insights
+    if (analysis.maintainability) {
+      if (analysis.maintainability.score < 0.5) {
+        keyFindings.push({
+          category: 'maintainability',
+          insight: 'Code maintainability needs improvement',
+          confidence: 0.8,
+          impact: 'medium'
+        });
+        
+        recommendations.push({
+          type: 'maintainability',
+          action: 'Refactor to improve readability and structure',
+          priority: 'medium'
+        });
+      }
+    }
+
+    // Extract performance insights
+    if (analysis.performance && analysis.performance.considerations.length > 0) {
+      keyFindings.push({
+        category: 'performance',
+        insight: `${analysis.performance.considerations.length} performance considerations`,
+        confidence: analysis.performance.confidence,
+        impact: 'medium'
       });
     }
 
-    if (synthesis.codeComplexity > 10) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'complexity', 
-        message: 'Code is highly complex - consider breaking into smaller functions',
-        action: 'Refactor to reduce cyclomatic complexity'
-      });
-    }
+    return { keyFindings, recommendations };
+  }
 
-    if (synthesis.overallScore < 60) {
-      recommendations.push({
-        priority: 'medium',
-        category: 'overall',
-        message: 'Overall code quality needs improvement',
-        action: 'Review and address recommendations above'
-      });
-    }
+  /**
+   * Generate executive summary
+   */
+  generateExecutiveSummary(insights) {
+    const criticalCount = insights.keyFindings.filter(f => f.impact === 'critical').length;
+    const highCount = insights.keyFindings.filter(f => f.impact === 'high').length;
+    
+    let overallStatus = 'good';
+    if (criticalCount > 0) overallStatus = 'critical';
+    else if (highCount > 0) overallStatus = 'needs_attention';
+    else if (insights.keyFindings.length > 0) overallStatus = 'satisfactory';
+    
+    return {
+      status: overallStatus,
+      totalFindings: insights.keyFindings.length,
+      criticalIssues: criticalCount,
+      highPriorityIssues: highCount,
+      recommendations: insights.recommendations.length,
+      summary: this.generateStatusSummary(overallStatus, insights)
+    };
+  }
 
-    // Positive reinforcement for good code
-    if (synthesis.overallScore > 80) {
-      recommendations.push({
-        priority: 'low',
-        category: 'positive',
-        message: 'Code quality is excellent!',
-        action: 'Maintain current standards'
-      });
-    }
+  generateStatusSummary(status, insights) {
+    const summaries = {
+      critical: 'Critical issues detected that require immediate attention',
+      needs_attention: 'Code needs attention to address important issues',
+      satisfactory: 'Code is in satisfactory condition with minor improvements possible',
+      good: 'Code is well-structured and follows good practices'
+    };
+    
+    return summaries[status] || 'Analysis complete';
+  }
 
-    return recommendations.sort((a, b) => {
-      const priorityOrder = { high: 0, medium: 1, low: 2 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
+  determineBestVersion(comparisons) {
+    if (!comparisons.versions || comparisons.versions.length === 0) return null;
+    
+    return comparisons.versions.reduce((best, current) => {
+      const bestScore = this.calculateOverallScore(best.scores);
+      const currentScore = this.calculateOverallScore(current.scores);
+      return currentScore > bestScore ? current : best;
     });
   }
 
-  /**
-   * Estimate code complexity
-   */
-  estimateComplexity(code) {
-    let complexity = 0;
-    complexity += (code.match(/if|else|switch/g) || []).length;
-    complexity += (code.match(/for|while|do/g) || []).length; 
-    complexity += (code.match(/&&|\|\|/g) || []).length;
-    complexity += (code.match(/try|catch/g) || []).length;
-    return complexity;
+  calculateOverallScore(scores) {
+    const weights = {
+      quality: 0.4,
+      maintainability: 0.3,
+      performance: 0.2,
+      readability: 0.1
+    };
+    
+    return Object.entries(scores).reduce((total, [category, score]) => {
+      return total + (score * (weights[category] || 0.1));
+    }, 0);
   }
 
-  /**
-   * Estimate code clarity based on analysis results
-   */
-  estimateClarity(layerResults) {
-    let clarity = 100;
+  analyzeDifferences(comparisons) {
+    if (!comparisons.versions || comparisons.versions.length < 2) return [];
     
-    // Purpose clarity
-    clarity *= layerResults.purpose.confidence || 0.5;
+    const differences = [];
+    const versions = comparisons.versions;
     
-    // Anomaly impact
-    clarity -= layerResults.anomalies.anomalies.length * 10;
-    
-    return Math.max(0, clarity);
-  }
-
-  /**
-   * Estimate maintainability score
-   */
-  estimateMaintainability(layerResults) {
-    let maintainability = 100;
-    
-    // High anomalies reduce maintainability
-    maintainability -= layerResults.anomalies.anomalies.filter(a => 
-      a.severity === 'high'
-    ).length * 20;
-    
-    // Medium anomalies have moderate impact
-    maintainability -= layerResults.anomalies.anomalies.filter(a =>
-      a.severity === 'medium'  
-    ).length * 10;
-
-    // Clear purpose improves maintainability
-    maintainability += (layerResults.purpose.confidence || 0) * 10;
-
-    return Math.max(0, Math.min(100, maintainability));
-  }
-
-  /**
-   * Get detailed breakdown for advanced analysis
-   */
-  async analyzeDeep(code, context = {}) {
-    const basicAnalysis = await this.understand(code, context);
-    
-    // Additional deep analysis
-    const relationships = await this.intuition.findRelationships([code]);
-    const intuitionScore = await this.hunch.getIntuitionScore(code);
-
-    return {
-      ...basicAnalysis,
-      deepAnalysis: {
-        relationships,
-        intuitionScore,
-        cognitiveBalance: this.analyzeCognitiveBalance(basicAnalysis.layers)
+    for (let i = 0; i < versions.length - 1; i++) {
+      for (let j = i + 1; j < versions.length; j++) {
+        const diff = this.compareTwoVersions(versions[i], versions[j]);
+        differences.push(diff);
       }
+    }
+    
+    return differences;
+  }
+
+  compareTwoVersions(version1, version2) {
+    const score1 = this.calculateOverallScore(version1.scores);
+    const score2 = this.calculateOverallScore(version2.scores);
+    
+    return {
+      versions: [version1.name, version2.name],
+      scoreDifference: Math.abs(score1 - score2),
+      betterVersion: score1 > score2 ? version1.name : version2.name,
+      keyDifferences: this.findKeyDifferences(version1, version2)
     };
   }
 
-  /**
-   * Analyze balance between cognitive layers
-   */
-  analyzeCognitiveBalance(layers) {
+  findKeyDifferences(version1, version2) {
+    const differences = [];
+    
+    const categories = ['quality', 'maintainability', 'performance', 'readability'];
+    categories.forEach(category => {
+      const diff = Math.abs(version1.scores[category] - version2.scores[category]);
+      if (diff > 0.2) {
+        differences.push({
+          category,
+          difference: diff,
+          better: version1.scores[category] > version2.scores[category] ? version1.name : version2.name
+        });
+      }
+    });
+    
+    return differences;
+  }
+
+  extractRelationshipInsights(relationships) {
+    const insights = [];
+    
+    if (relationships.strongConnections > 5) {
+      insights.push({
+        type: 'high-coupling',
+        insight: 'High coupling detected between code segments',
+        recommendation: 'Consider decoupling tightly connected components',
+        severity: 'medium'
+      });
+    }
+    
+    if (relationships.isolatedComponents > 3) {
+      insights.push({
+        type: 'low-cohesion',
+        insight: 'Multiple isolated components with little interaction',
+        recommendation: 'Review component relationships for better integration',
+        severity: 'low'
+      });
+    }
+    
+    return insights;
+  }
+
+  calculateRelationshipConfidence(relationships) {
+    if (!relationships.connections || relationships.connections.length === 0) {
+      return 0.3;
+    }
+    
+    const avgConfidence = relationships.connections.reduce((sum, conn) => 
+      sum + conn.confidence, 0
+    ) / relationships.connections.length;
+    
+    return Math.min(avgConfidence * 1.1, 0.95);
+  }
+
+  getFallbackAnalysis() {
     return {
-      purposeStrength: layers.point.confidence,
-      anomalyAwareness: layers.hunch.confidence, 
-      patternRecognition: layers.intuition.confidence,
-      balanced: layers.point.confidence > 0.5 && 
-                layers.hunch.confidence > 0.5 && 
-                layers.intuition.confidence > 0.5
+      purpose: { primaryPurpose: { purpose: 'unknown', confidence: 0.1 } },
+      quality: { anomalies: [], confidence: 0.1 },
+      maintainability: { score: 0.1, confidence: 0.1 },
+      performance: { considerations: [], confidence: 0.1 },
+      metrics: {},
+      confidence: 0.1,
+      summary: { status: 'unknown', totalFindings: 0 }
+    };
+  }
+
+  getFallbackReport() {
+    return {
+      summary: { status: 'analysis_failed', totalFindings: 0 },
+      keyFindings: [],
+      recommendations: [],
+      metrics: {},
+      confidence: 0.1
     };
   }
 
   getVersion() {
-    return this.version;
-  }
-
-  /**
-   * Get suite information
-   */
-  getSuiteInfo() {
-    return {
-      suite: 'Insight Cognitive Code Analysis Suite',
-      version: this.version,
-      layers: {
-        point: this.point.getVersion(),
-        hunch: this.hunch.getVersion(), 
-        intuition: this.intuition.getVersion()
-      },
-      cognitiveStack: ['Purpose Detection', 'Anomaly Detection', 'Pattern Learning', 'Holistic Synthesis']
-    };
+    return '1.0.0';
   }
 }
 
-export default InsightJS;
+export { HolisticAnalyzer, CorrelationEngine };

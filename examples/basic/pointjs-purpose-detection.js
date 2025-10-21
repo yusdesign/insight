@@ -15,7 +15,7 @@ const point = new PointJS({
 
 // Different code examples for purpose detection
 const codeExamples = {
-  validation: \`
+  validation: `
     function validateEmail(email) {
       const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
       if (!regex.test(email)) {
@@ -23,9 +23,9 @@ const codeExamples = {
       }
       return true;
     }
-  \`,
+  `,
   
-  transformation: \`
+  transformation: `
     function processUserData(users) {
       return users
         .filter(user => user.active)
@@ -36,12 +36,12 @@ const codeExamples = {
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
     }
-  \`,
+  `,
   
-  apiCommunication: \`
+  apiCommunication: `
     async function fetchUserProfile(userId) {
       try {
-        const response = await fetch(\`/api/users/\${userId}\`);
+	const response = await fetch(\`/api/users/\${userId}\`);
         if (!response.ok) throw new Error('User not found');
         const userData = await response.json();
         return {
@@ -53,7 +53,7 @@ const codeExamples = {
         return null;
       }
     }
-  \`
+  `
 };
 
 async function demonstratePurposeDetection() {
@@ -61,21 +61,21 @@ async function demonstratePurposeDetection() {
   console.log('=' .repeat(50));
   
   for (const [exampleName, code] of Object.entries(codeExamples)) {
-    console.log(\`\\n📝 Analyzing \${exampleName} code...\\n\`);
+    console.log(`\\n📝 Analyzing \${exampleName} code...\\n`);
     
     try {
       // Identify code purpose
       const analysis = await point.identify(code);
       
-      console.log(\`Primary Purpose: \${analysis.primaryPurpose?.purpose || 'Unknown'}\`);
-      console.log(\`Confidence: \${(analysis.confidence * 100).toFixed(1)}%\`);
-      console.log(\`Description: \${analysis.primaryPurpose?.description || 'No description'}\`);
+      console.log(`Primary Purpose: \${analysis.primaryPurpose?.purpose || 'Unknown'}`);
+      console.log(`Confidence: \${(analysis.confidence * 100).toFixed(1)}%`);
+      console.log(`Description: \${analysis.primaryPurpose?.description || 'No description'}`);
       
       // Show all detected purposes
       if (analysis.purposes.length > 1) {
         console.log('\\nAll detected purposes:');
         analysis.purposes.forEach(purpose => {
-          console.log(\`  - \${purpose.purpose}: \${(purpose.confidence * 100).toFixed(1)}% confidence\`);
+          console.log(`  - ${purpose.purpose}: \${(purpose.confidence * 100).toFixed(1)}% confidence`);
         });
       }
       
@@ -87,18 +87,18 @@ async function demonstratePurposeDetection() {
       };
       
       const alignment = await point.isAligned(goals[exampleName], code);
-      console.log(\`\\n🎯 Goal Alignment: \${alignment.aligned ? '✅' : '❌'}\`);
-      console.log(\`Alignment Score: \${(alignment.score * 100).toFixed(1)}%\`);
+      console.log(`\\n🎯 Goal Alignment: \${alignment.aligned ? '✅' : '❌'}`);
+      console.log(`Alignment Score: \${(alignment.score * 100).toFixed(1)}%`);
       
       if (alignment.matches.length > 0) {
         console.log('Key matches:');
         alignment.matches.slice(0, 3).forEach(match => {
-          console.log(\`  - "\${match.goalKeyword}" ↔ "\${match.codeTerm}"\`);
+          console.log(`  - "${match.goalKeyword}" ↔ "\${match.codeTerm}"`);
         });
       }
       
     } catch (error) {
-      console.error(\`❌ Analysis failed for \${exampleName}:\`, error.message);
+      console.error(`❌ Analysis failed for ${exampleName}:`, error.message);
     }
     
     console.log('\\n' + '-'.repeat(40));
@@ -110,7 +110,7 @@ async function demonstrateGoalExtraction() {
   console.log('\\n📋 Goal Extraction from Comments');
   console.log('=' .repeat(40));
   
-  const codeWithComments = \`
+  const codeWithComments = `
     // TODO: Implement rate limiting for API endpoints
     // FIXME: Memory leak in image processing function
     // NOTE: Temporary solution for demo purposes
@@ -119,7 +119,7 @@ async function demonstrateGoalExtraction() {
       // TODO: Add input validation here
       return data.map(item => item * 2);
     }
-  \`;
+  `;
   
   const goals = point.extractGoals(codeWithComments);
   
@@ -127,7 +127,7 @@ async function demonstrateGoalExtraction() {
     console.log('Extracted development goals:');
     goals.forEach(goal => {
       const priorityIcon = goal.priority === 'high' ? '🔴' : goal.priority === 'medium' ? '🟡' : '🔵';
-      console.log(\`\${priorityIcon} [\${goal.type.toUpperCase()}] \${goal.goal}\`);
+      console.log(`${priorityIcon} [${goal.type.toUpperCase()}] \${goal.goal}`);
     });
   } else {
     console.log('No goals found in comments');

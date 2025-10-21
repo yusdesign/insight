@@ -37,7 +37,7 @@ const userValidationCode = `
     const requiredFields = ['email', 'password', 'username'];
     for (const field of requiredFields) {
       if (!user[field]) {
-        errors.push(\`\${field} is required\`);
+	errors.push(\`\${field} is required\`);
       }
     }
     
@@ -95,29 +95,29 @@ async function runHolisticAnalysis() {
     console.log('-' .repeat(30));
     
     // Overall assessment
-    console.log(\`🏆 Overall Score: \${analysis.overallScore}/100\`);
-    console.log(\`💎 Analysis Confidence: \${(analysis.confidence * 100).toFixed(1)}%\`);
+    console.log(`🏆 Overall Score: \${analysis.overallScore}/100`);
+    console.log(`💎 Analysis Confidence: \${(analysis.confidence * 100).toFixed(1)}%`);
     
     // Purpose understanding
     console.log('\n🎯 PURPOSE UNDERSTANDING');
     console.log('-' .repeat(25));
-    console.log(\`Primary Purpose: \${analysis.synthesis.purpose}\`);
-    console.log(\`Purpose Confidence: \${(analysis.synthesis.purposeConfidence * 100).toFixed(1)}%\`);
+    console.log(`Primary Purpose: \${analysis.synthesis.purpose}`);
+    console.log(`Purpose Confidence: \${(analysis.synthesis.purposeConfidence * 100).toFixed(1)}%`);
     
     // Quality assessment
     console.log('\n🚨 QUALITY ASSESSMENT');
     console.log('-' .repeat(20));
-    console.log(\`Total Anomalies: \${analysis.synthesis.anomalyCount}\`);
-    console.log(\`Critical Issues: \${analysis.synthesis.criticalAnomalies.length}\`);
-    console.log(\`Maintainability: \${analysis.synthesis.maintainability}/100\`);
-    console.log(\`Clarity Score: \${analysis.synthesis.clarityScore}/100\`);
+    console.log(`Total Anomalies: \${analysis.synthesis.anomalyCount}`);
+    console.log(`Critical Issues: \${analysis.synthesis.criticalAnomalies.length}`);
+    console.log(`Maintainability: \${analysis.synthesis.maintainability}/100`);
+    console.log(`Clarity Score: \${analysis.synthesis.clarityScore}/100`);
     
     // Pattern recognition
     console.log('\n🧩 PATTERN RECOGNITION');
     console.log('-' .repeat(22));
-    console.log(\`Patterns Recognized: \${analysis.synthesis.patternCount}\`);
+    console.log(`Patterns Recognized: \${analysis.synthesis.patternCount}`);
     if (analysis.synthesis.primaryPattern) {
-      console.log(\`Primary Pattern: \${analysis.synthesis.primaryPattern.label} (\${(analysis.synthesis.primaryPattern.confidence * 100).toFixed(1)}% confidence)\`);
+      console.log(`Primary Pattern: ${analysis.synthesis.primaryPattern.label} (\${(analysis.synthesis.primaryPattern.confidence * 100).toFixed(1)}% confidence)`);
     }
     
     // Recommendations
@@ -129,8 +129,8 @@ async function runHolisticAnalysis() {
     } else {
       analysis.recommendations.forEach((rec, index) => {
         const priorityIcon = rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🔵';
-        console.log(\`\${priorityIcon} [\${rec.priority.toUpperCase()}] \${rec.message}\`);
-        console.log(\`   Action: \${rec.action}\`);
+        console.log(`${priorityIcon} [${rec.priority.toUpperCase()}] \${rec.message}`);
+        console.log(`   Action: \${rec.action}`);
         if (index < analysis.recommendations.length - 1) console.log(''); // Spacing
       });
     }
@@ -138,9 +138,9 @@ async function runHolisticAnalysis() {
     // Layer details (available for deeper inspection)
     console.log('\n🔍 COGNITIVE LAYER DETAILS');
     console.log('-' .repeat(25));
-    console.log(\`Purpose Analysis Confidence: \${(analysis.layers.point.confidence * 100).toFixed(1)}%\`);
-    console.log(\`Anomaly Detection Confidence: \${(analysis.layers.hunch.confidence * 100).toFixed(1)}%\`);
-    console.log(\`Pattern Recognition Confidence: \${(analysis.layers.intuition.confidence * 100).toFixed(1)}%\`);
+    console.log(`Purpose Analysis Confidence: \${(analysis.layers.point.confidence * 100).toFixed(1)}%`);
+    console.log(`Anomaly Detection Confidence: \${(analysis.layers.hunch.confidence * 100).toFixed(1)}%`);
+    console.log(`Pattern Recognition Confidence: \${(analysis.layers.intuition.confidence * 100).toFixed(1)}%`);
     
   } catch (error) {
     console.error('❌ Analysis failed:', error.message);

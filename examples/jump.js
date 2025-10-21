@@ -1,58 +1,54 @@
 /**
- * Jump Helper - Safe Navigation Between Insight Suite Examples
+ * Jump Helper - Professional Navigation Between Insight Suite Examples
  * 
- * Features:
- * - Health checks before running examples
- * - Safe error handling and recovery
- * - Progress tracking and timeouts
- * - Dependency verification
+ * Uses nanospinner for better UX and proper health checks
  */
 
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { readdir, access } from 'fs/promises';
 import { createSpinner } from 'nanospinner';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const execAsync = promisify(exec);
 
 // Configuration
 const config = {
-  timeout: 30000, // 30 seconds per example
-  healthCheckTimeout: 5000, // 5 seconds for health checks
+  timeout: 30000,
 };
 
 const exampleMap = {
-  // Basic examples
   'point': { 
-    path: 'examples/basic/pointjs-purpose-detection.js',
+    path: 'basic/pointjs-purpose-detection.js',
     description: 'Purpose detection with point.js',
-    dependencies: ['point.js']
+    health: 'purpose-analysis'
   },
   'hunch': { 
-    path: 'examples/basic/hunchjs-anomaly-detection.js',
-    description: 'Anomaly detection with hunch.js',
-    dependencies: ['hunch.js']
+    path: 'basic/hunchjs-anomaly-detection.js',
+    description: 'Anomaly detection with hunch.js', 
+    health: 'quality-analysis'
   },
   'intuition': { 
-    path: 'examples/basic/intuitionjs-pattern-learning.js',
-    description: 'Pattern learning with intuition.js', 
-    dependencies: ['intuition.js']
+    path: 'basic/intuitionjs-pattern-learning.js',
+    description: 'Pattern learning with intuition.js',
+    health: 'pattern-analysis'
   },
   'insight': { 
-    path: 'examples/basic/insightjs-holistic-analysis.js',
+    path: 'basic/insightjs-holistic-analysis.js',
     description: 'Holistic analysis with insight.js',
-    dependencies: ['insight.js']
+    health: 'holistic-analysis'
   },
-  
-  // Categories
   'basic': {
-    path: 'examples/basic',
+    path: 'basic',
     description: 'All basic examples',
     type: 'directory'
   }
 };
 
-class SafeExampleRunner {
+class ProfessionalExampleRunner {
   constructor() {
     this.stats = {
       total: 0,
@@ -62,38 +58,45 @@ class SafeExampleRunner {
     };
   }
 
-  async healthCheck() {
+  async healthCheck(type = 'general') {
     const spinner = createSpinner('Running health checks...').start();
     
     try {
-      // Check if we're in the right directory
-      await access('package.json');
-      await access('examples');
+      // 1. File system health
+      await access('jump.js');
+      await access('basic');
+      spinner.success({ text: '✅ File system healthy' });
+
+      // 2. Package health (different checks for different types)
+      const packageSpinner = createSpinner('Checking package availability...').start();
       
-      spinner.success({ text: '✅ Project structure looks good' });
-      return true;
-    } catch (error) {
-      spinner.error({ text: '❌ Health check failed' });
-      console.error('Please run from the insight project root directory');
-      return false;
-    }
-  }
-
-  async checkDependencies(dependencies) {
-    if (!dependencies || dependencies.length === 0) return true;
-
-    const spinner = createSpinner('Checking dependencies...').start();
-    
-    try {
-      for (const dep of dependencies) {
-        // Try to import the dependency
-        await import(dep);
+      try {
+        // Try to import packages based on health type
+        if (type === 'purpose-analysis' || type === 'general') {
+          await import('../packages/point.js/src/index.js');
+        }
+        if (type === 'quality-analysis' || type === 'general') {
+          await import('../packages/hunch.js/src/index.js');
+        }
+        if (type === 'pattern-analysis' || type === 'general') {
+          await import('../packages/intuition.js/src/index.js');
+        }
+        if (type === 'holistic-analysis' || type === 'general') {
+          await import('../packages/insight.js/src/index.js');
+        }
+        
+        packageSpinner.success({ text: '✅ Packages available' });
+        return true;
+        
+      } catch (error) {
+        packageSpinner.error({ text: '❌ Packages not available' });
+        console.log('💡 Run: npm install from the insight root directory');
+        return false;
       }
-      spinner.success({ text: '✅ All dependencies available' });
-      return true;
+
     } catch (error) {
-      spinner.error({ text: `❌ Missing dependency: ${dependencies.join(', ')}` });
-      console.error('Run: npm install', dependencies.join(' '));
+      spinner.error({ text: '❌ File system issues' });
+      console.error('Please run from the examples directory');
       return false;
     }
   }
@@ -117,13 +120,14 @@ class SafeExampleRunner {
   }
 
   async runExample(exampleConfig) {
-    const { path, description, dependencies } = exampleConfig;
+    const { path, description, health } = exampleConfig;
+    const fullPath = join(__dirname, path);
     
-    console.log(`\\n🚀 ${description}`);
+    console.log(`\n🚀 ${description}`);
     console.log('='.repeat(50));
 
-    // Check dependencies
-    if (dependencies && !(await this.checkDependencies(dependencies))) {
+    // Health check for this specific example type
+    if (!(await this.healthCheck(health))) {
       this.stats.skipped++;
       return false;
     }
@@ -132,19 +136,19 @@ class SafeExampleRunner {
     
     try {
       const { stdout, stderr } = await this.runWithTimeout(
-        `node ${path}`,
+        `node ${fullPath}`,
         config.timeout
       );
 
       spinner.success({ text: '✅ Completed successfully' });
 
       if (stdout) {
-        console.log('\\n📋 Output:');
+        console.log('\n📋 Output:');
         console.log(stdout);
       }
 
       if (stderr) {
-        console.log('\\n⚠️  Warnings:');
+        console.log('\n⚠️  Warnings:');
         console.log(stderr);
       }
 
@@ -155,7 +159,7 @@ class SafeExampleRunner {
       spinner.error({ text: '❌ Execution failed' });
       
       if (error.message.includes('Timeout')) {
-        console.error('⏰ Example timed out - it may be stuck in an infinite loop');
+        console.error('⏰ Example timed out');
       } else {
         console.error('💥 Error:', error.message);
       }
@@ -166,10 +170,11 @@ class SafeExampleRunner {
   }
 
   async runAllInDirectory(directoryPath) {
-    console.log(`\\n📁 Running all examples in: ${directoryPath}`);
+    const fullPath = join(__dirname, directoryPath);
+    console.log(`\n📁 Running all examples in: ${directoryPath}`);
     
     try {
-      const files = await readdir(directoryPath);
+      const files = await readdir(fullPath);
       const jsFiles = files.filter(file => file.endsWith('.js'));
       
       this.stats.total = jsFiles.length;
@@ -181,12 +186,10 @@ class SafeExampleRunner {
         await this.runExample({
           path: filePath,
           description: `Running ${exampleName}`,
-          dependencies: [] // Check will happen in individual examples
+          health: 'general'
         });
         
         console.log('─'.repeat(50));
-        
-        // Small delay between examples
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
       
@@ -196,109 +199,107 @@ class SafeExampleRunner {
   }
 
   printStats() {
-    console.log('\\n📊 EXECUTION SUMMARY:');
+    console.log('\n📊 EXECUTION SUMMARY:');
     console.log('='.repeat(25));
     console.log(`✅ Successful: ${this.stats.successful}`);
     console.log(`❌ Failed: ${this.stats.failed}`);
     console.log(`⏭️  Skipped: ${this.stats.skipped}`);
     console.log(`📈 Total: ${this.stats.total}`);
     
+    const successRate = this.stats.total > 0 ? (this.stats.successful / this.stats.total) * 100 : 0;
+    console.log(`🎯 Success Rate: ${successRate.toFixed(1)}%`);
+    
     if (this.stats.failed === 0 && this.stats.skipped === 0) {
-      console.log('\\n🎉 All examples completed successfully!');
+      console.log('\n🎉 All examples completed successfully!');
+    } else if (this.stats.skipped > 0) {
+      console.log('\n⚠️  Some examples skipped due to health issues');
     } else {
-      console.log('\\n⚠️  Some examples had issues. Check the logs above.');
+      console.log('\n❌ Some examples failed. Check logs above.');
     }
   }
 }
 
-async function showAvailableExamples() {
-  console.log('🎯 Safe Insight Suite Examples Runner');
+// Health check types demonstration
+async function demonstrateHealthTypes() {
+  console.log('🏥 Insight Suite Health Check Types');
   console.log('='.repeat(45));
   
-  console.log('\\n📚 INDIVIDUAL EXAMPLES:');
+  const healthTypes = {
+    'purpose-analysis': '🧭 Checks point.js for purpose detection capability',
+    'quality-analysis': '🔮 Checks hunch.js for anomaly detection', 
+    'pattern-analysis': '🧠 Checks intuition.js for pattern learning',
+    'holistic-analysis': '💡 Checks insight.js for complete analysis',
+    'code-health': '📊 General code quality and structure checks',
+    'system-health': '⚙️  Environment and dependency checks'
+  };
+  
+  for (const [type, description] of Object.entries(healthTypes)) {
+    console.log(`\n${type}:`);
+    console.log(`  ${description}`);
+  }
+}
+
+async function showAvailableExamples() {
+  console.log('🎯 Professional Insight Suite Examples Runner');
+  console.log('='.repeat(50));
+  
+  console.log('\n📚 INDIVIDUAL EXAMPLES:');
   for (const [key, config] of Object.entries(exampleMap)) {
     if (config.type !== 'directory') {
       console.log(`  ${key.padEnd(12)} - ${config.description}`);
     }
   }
   
-  console.log('\\n📁 CATEGORIES:');
+  console.log('\n📁 CATEGORIES:');
   for (const [key, config] of Object.entries(exampleMap)) {
     if (config.type === 'directory') {
       console.log(`  ${key.padEnd(12)} - ${config.description}`);
     }
   }
   
-  console.log('\\n🔧 USAGE:');
+  console.log('\n🔧 USAGE:');
   console.log('  node jump.js [example-name]');
-  console.log('  node jump.js basic          # Run all basic examples');
-  console.log('  node jump.js all            # Run everything!');
-  console.log('  node jump.js health         # Run health checks only');
+  console.log('  node jump.js basic');
+  console.log('  node jump.js health-types');
   
-  console.log('\\n🛡️  SAFETY FEATURES:');
-  console.log('  • 30-second timeouts per example');
-  console.log('  • Dependency verification');
-  console.log('  • Health checks before execution');
-  console.log('  • Progress tracking and statistics');
-  console.log('  • Graceful error handling');
-}
-
-async function runHealthCheck() {
-  const runner = new SafeExampleRunner();
-  console.log('🏥 Running comprehensive health checks...\\n');
-  
-  const healthy = await runner.healthCheck();
-  
-  if (healthy) {
-    console.log('\\n✅ System is healthy and ready for examples!');
-  } else {
-    console.log('\\n❌ Health checks failed. Please fix issues before running examples.');
-  }
-  
-  return healthy;
+  console.log('\n🛡️  FEATURES:');
+  console.log('  • Type-specific health checks');
+  console.log('  • Professional progress indicators');
+  console.log('  • Success rate tracking');
+  console.log('  • Smart package verification');
 }
 
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'help';
   
-  const runner = new SafeExampleRunner();
+  const runner = new ProfessionalExampleRunner();
   
-  // Handle Ctrl+C gracefully
   process.on('SIGINT', () => {
-    console.log('\\n\\n🛑 Execution interrupted by user');
+    console.log('\n\n🛑 Execution interrupted by user');
     runner.printStats();
     process.exit(0);
   });
 
   switch (command) {
     case 'health':
-      await runHealthCheck();
+      await runner.healthCheck('general');
+      break;
+      
+    case 'health-types':
+      await demonstrateHealthTypes();
       break;
       
     case 'point':
     case 'hunch':
     case 'intuition':
     case 'insight':
-      if (await runHealthCheck()) {
-        await runner.runExample(exampleMap[command]);
-      }
+      await runner.runExample(exampleMap[command]);
       break;
       
     case 'basic':
-      if (await runHealthCheck()) {
-        await runner.runAllInDirectory(exampleMap.basic.path);
-        runner.printStats();
-      }
-      break;
-      
-    case 'all':
-      if (await runHealthCheck()) {
-        console.log('🏃‍♂️ Running ALL Insight Suite Examples!\\n');
-        await runner.runAllInDirectory(exampleMap.basic.path);
-        // Add other categories as they're created
-        runner.printStats();
-      }
+      await runner.runAllInDirectory(exampleMap.basic.path);
+      runner.printStats();
       break;
       
     case 'help':
@@ -306,16 +307,6 @@ async function main() {
       await showAvailableExamples();
       break;
   }
-}
-
-// Check if nanospinner is available, provide fallback
-if (typeof createSpinner === 'undefined') {
-  global.createSpinner = (text) => ({
-    start: () => ({ 
-      success: (opts) => console.log(`✅ ${opts?.text || text}`),
-      error: (opts) => console.log(`❌ ${opts?.text || text}`)
-    })
-  });
 }
 
 main().catch(console.error);

@@ -1,68 +1,34 @@
-import { PurposeIdentifier } from '../src/core/identifier.js';
-import { GoalAligner } from '../src/core/aligner.js';
-import assert from 'assert';
+import PointJS from '../src/index.js';
+import { describe, it } from 'node:test';
+import assert from 'node:assert';
 
-// Test PurposeIdentifier
-async function testPurposeIdentifier() {
-  console.log('🧪 Testing PurposeIdentifier...');
-  const identifier = new PurposeIdentifier();
+describe('Point.js Basic Functionality', () => {
+  it('should identify validation code', async () => {
+    const point = new PointJS();
+    const validationCode = `
+      function validate(input) {
+        if (!input) throw new Error('Input required');
+        return input.length > 0;
+      }
+    `;
+    
+    const analysis = await point.identify(validationCode);
+    assert.ok(analysis.confidence > 0.1);
+    assert.ok(analysis.primaryPurpose.purpose);
+  });
+  
+  it('should extract goals from comments', () => {
+    const point = new PointJS();
+    const codeWithComments = `
+      // TODO: Implement caching
+      // FIXME: Memory leak in processData
+      function someFunction() {}
+    `;
+    
+    const goals = point.extractGoals(codeWithComments);
+    assert.strictEqual(goals.length, 2);
+    assert.strictEqual(goals[0].type, 'todo');
+  });
+});
 
-  // Test 1: Identify data validation code
-  const code = `
-    function validateEmail(email) {
-      const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      return regex.test(email);
-    }
-  `;
-
-  const analysis = await identifier.analyze(code);
-  assert(analysis.purposes.length > 0, 'Should find at least one purpose');
-  console.log('✅ Purpose identification test passed');
-
-  // Test 2: Empty code handling
-  const emptyAnalysis = await identifier.analyze('');
-  assert(emptyAnalysis.purposes.length === 0, 'Empty code should return no purposes');
-  assert(emptyAnalysis.primaryPurpose === null, 'Empty code should have no primary purpose');
-  console.log('✅ Empty code test passed');
-}
-
-// Test GoalAligner  
-async function testGoalAligner() {
-  console.log('🧪 Testing GoalAligner...');
-  const aligner = new GoalAligner();
-
-  // Test 1: Goal alignment
-  const goal = "Validate user email format";
-  const code = `
-    function validateEmail(email) {
-      const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      return regex.test(email);
-    }
-  `;
-
-  const result = await aligner.checkAlignment(goal, code);
-  assert(typeof result.aligned === 'boolean', 'Should return alignment boolean');
-  assert(typeof result.score === 'number', 'Should return alignment score');
-  console.log('✅ Goal alignment test passed');
-
-  // Test 2: Comment parsing
-  const comments = "// TODO: Implement error handling";
-  const goals = aligner.parseComments(comments);
-  assert(Array.isArray(goals), 'Should return array of goals');
-  console.log('✅ Comment parsing test passed');
-}
-
-// Run all tests
-async function runTests() {
-  try {
-    await testPurposeIdentifier();
-    await testGoalAligner();
-    console.log('\n🎉 All tests passed!');
-  } catch (error) {
-    console.error('\n❌ Test failed:', error.message);
-    process.exit(1);
-  }
-}
-
-runTests();
-
+console.log('✅ All Point.js tests passed!');

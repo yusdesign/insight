@@ -2,6 +2,7 @@
   "name": "insight-monorepo",
   "version": "0.1.0",
   "description": "A suite of intelligent development tools for understanding code",
+  "type": "module",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -30,9 +31,12 @@
     "url": "https://github.com/yusdesign/insight.git"
   },
   "devDependencies": {
-    "lerna": "^6.0.0"
+    "lerna": "^9.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "nanospinner": "^1.2.2"
   }
 }

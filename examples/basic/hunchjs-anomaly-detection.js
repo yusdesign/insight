@@ -16,7 +16,7 @@ const hunch = new HunchJS({
 
 // Code examples with various quality issues
 const codeExamples = {
-  cleanCode: \`
+  cleanCode: `
     /**
      * Calculates the area of a rectangle
      * @param {number} width - The width of the rectangle
@@ -34,13 +34,13 @@ const codeExamples = {
       
       return width * height;
     }
-  \`,
+  `,
   
-  smellyCode: \`
+  smellyCode: `
     function x(a,b,c){if(a){if(b){if(c){let d=123;let e=456;let f=789;let g=012;let h=345;let i=678;let j=901;let k=234;let l=567;let m=890;let n=123;let o=456;let p=789;let q=012;let r=345;let s=678;let t=901;let u=234;let v=567;let w=890;let x=123;let y=456;let z=789;return d+e+f+g+h+i+j+k+l+m+n+o+p+q+r+s+t+u+v+w+x+y+z}}}}
-  \`,
+  `,
   
-  nestedCode: \`
+  nestedCode: `
     function processUserData(user) {
       if (user) {
         if (user.profile) {
@@ -55,9 +55,9 @@ const codeExamples = {
       }
       return false;
     }
-  \`,
+  `,
   
-  patternCode: \`
+  patternCode: `
     class DatabaseConnection {
       static instance = null;
       
@@ -95,7 +95,7 @@ const codeExamples = {
         }
       }
     }
-  \`
+  `
 };
 
 async function demonstrateAnomalyDetection() {
@@ -103,21 +103,21 @@ async function demonstrateAnomalyDetection() {
   console.log('=' .repeat(60));
   
   for (const [exampleName, code] of Object.entries(codeExamples)) {
-    console.log(\`\\n📊 Analyzing \${exampleName}...\\n\`);
+    console.log(`\\n📊 Analyzing ${exampleName}...\\n`);
     
     try {
       // Detect anomalies and code smells
       const anomalyAnalysis = await hunch.detectAnomalies(code);
       
       // Display quality assessment
-      console.log(\`🧪 Intuition Score: \${(await hunch.getIntuitionScore(code) * 100).toFixed(1)}/100\`);
-      console.log(\`🎯 Analysis Confidence: \${(anomalyAnalysis.confidence * 100).toFixed(1)}%\`);
+      console.log(`🧪 Intuition Score: ${(await hunch.getIntuitionScore(code) * 100).toFixed(1)}/100`);
+      console.log(`🎯 Analysis Confidence: ${(anomalyAnalysis.confidence * 100).toFixed(1)}%`);
       
       // Show anomaly summary
-      console.log(\`\\n🚨 ANOMALIES DETECTED: \${anomalyAnalysis.anomalies.length}\`);
-      console.log(\`   🔴 Critical: \${anomalyAnalysis.summary.bySeverity.high}\`);
-      console.log(\`   🟡 Medium: \${anomalyAnalysis.summary.bySeverity.medium}\`);
-      console.log(\`   🔵 Low: \${anomalyAnalysis.summary.bySeverity.low}\`);
+      console.log(`\\n🚨 ANOMALIES DETECTED: ${anomalyAnalysis.anomalies.length}`);
+      console.log(`   🔴 Critical: ${anomalyAnalysis.summary.bySeverity.high}`);
+      console.log(`   🟡 Medium: ${anomalyAnalysis.summary.bySeverity.medium}`);
+      console.log(`   🔵 Low: ${anomalyAnalysis.summary.bySeverity.low}`);
       
       // Display specific anomalies
       if (anomalyAnalysis.anomalies.length > 0) {
@@ -125,9 +125,9 @@ async function demonstrateAnomalyDetection() {
         anomalyAnalysis.anomalies.forEach(anomaly => {
           const severityIcon = anomaly.severity === 'high' ? '🔴' : 
                              anomaly.severity === 'medium' ? '🟡' : '🔵';
-          console.log(\`\${severityIcon} \${anomaly.type}: \${anomaly.description}\`);
-          console.log(\`   Confidence: \${(anomaly.confidence * 100).toFixed(1)}%\`);
-          console.log(\`   Occurrences: \${anomaly.matches}\`);
+          console.log(`${severityIcon} ${anomaly.type}: ${anomaly.description}`);
+          console.log(`   Confidence: ${(anomaly.confidence * 100).toFixed(1)}%`);
+          console.log(`   Occurrences: ${anomaly.matches}`);
         });
       } else {
         console.log('✅ No code smells detected!');
@@ -142,14 +142,14 @@ async function demonstrateAnomalyDetection() {
           const categoryIcon = pattern.category === 'creational' ? '🏗️' :
                              pattern.category === 'structural' ? '🏛️' :
                              pattern.category === 'behavioral' ? '🎭' : '⚠️';
-          console.log(\`\${categoryIcon} \${pattern.type}: \${pattern.description}\`);
-          console.log(\`   Confidence: \${(pattern.confidence * 100).toFixed(1)}%\`);
-          console.log(\`   Category: \${pattern.category}\`);
+          console.log(`${categoryIcon} ${pattern.type}: ${pattern.description}`);
+          console.log(`   Confidence: ${(pattern.confidence * 100).toFixed(1)}%`);
+          console.log(`   Category: ${pattern.category}`);
         });
       }
       
     } catch (error) {
-      console.error(\`❌ Analysis failed for \${exampleName}:\`, error.message);
+      console.error(`❌ Analysis failed for ${exampleName}:`, error.message);
     }
     
     console.log('\\n' + '─'.repeat(50));
@@ -161,7 +161,7 @@ async function demonstrateTargetedDetection() {
   console.log('\\n🎯 Targeted Smell Detection');
   console.log('=' .repeat(35));
   
-  const complexCode = \`
+  const complexCode = `
     function handleUserRegistration(user) {
       // Deep nesting example
       if (user) {
@@ -184,7 +184,7 @@ async function demonstrateTargetedDetection() {
       }
       return 0;
     }
-  \`;
+  `;
   
   console.log('Looking for specific code smells...\\n');
   
@@ -198,9 +198,9 @@ async function demonstrateTargetedDetection() {
   targetedSmells.anomalies.forEach(anomaly => {
     const severityColor = anomaly.severity === 'high' ? '\\x1b[31m' : 
                          anomaly.severity === 'medium' ? '\\x1b[33m' : '\\x1b[34m';
-    console.log(\`\${severityColor}🔍 \${anomaly.type.toUpperCase()}: \${anomaly.description}\\x1b[0m\`);
-    console.log(\`   Severity: \${anomaly.severity}\`);
-    console.log(\`   Confidence: \${(anomaly.confidence * 100).toFixed(1)}%\`);
+    console.log(`${severityColor}🔍 ${anomaly.type.toUpperCase()}: ${anomaly.description}\\x1b[0m`);
+    console.log(`   Severity: ${anomaly.severity}`);
+    console.log(`   Confidence: ${(anomaly.confidence * 100).toFixed(1)}%`);
   });
 }
 
@@ -231,7 +231,7 @@ async function demonstrateQualityScoring() {
     else if (scaledScore >= 40) { rating = 'Fair'; icon = '🟠'; }
     else { rating = 'Poor'; icon = '🔴'; }
     
-    console.log(\`\${icon} \${test.name}: \${scaledScore.toFixed(1)}/100 (\${rating})\`);
+    console.log(`${icon} ${test.name}: ${scaledScore.toFixed(1)}/100 (${rating})`);
   }
 }
 

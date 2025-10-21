@@ -1,13 +1,15 @@
 {
   "name": "point.js",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Find your code's true north - Purpose detection and goal alignment",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
+    "build": "node build.js",
     "test": "node tests/basic.test.js",
     "example": "node examples/basic-usage.js",
-    "dev": "node examples/basic-usage.js"
+    "dev": "node build.js --watch",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "code-analysis",
@@ -21,6 +23,16 @@
     "type": "git",
     "url": "https://github.com/yusdesign/insight.git",
     "directory": "packages/point.js"
+  },
+  "dependencies": {
+    "compromise": "^14.14.4",
+    "esbuild": "^0.25.11",
+    "esbuild-node-externals": "^1.18.0",
+    "franc": "^6.2.0",
+    "stemmer": "^2.0.1",
+    "stopword": "^2.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
   }
 }
-

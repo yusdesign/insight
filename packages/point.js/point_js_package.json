@@ -1,7 +1,7 @@
 {
-  "name": "insight.js",
+  "name": "point.js",
   "version": "1.0.0",
-  "description": "Holistic code analysis and insight generation",
+  "description": "Find your code's true north - Purpose detection and goal alignment",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
@@ -13,24 +13,22 @@
   },
   "keywords": [
     "code-analysis",
-    "holistic",
-    "insight",
-    "architecture",
-    "code-quality",
-    "ai"
+    "purpose-detection",
+    "goal-alignment",
+    "developer-tools"
   ],
   "author": "yusdesign",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/yusdesign/insight.git",
-    "directory": "packages/insight.js"
+    "directory": "packages/point.js"
   },
   "dependencies": {
-    "esbuild": "^0.25.11",
-    "esbuild-node-externals": "^1.18.0",
+    "compromise": "^14.14.4",
+    "franc": "^6.2.0",
     "stemmer": "^2.0.1",
-    "stopword": "^3.1.5"
+    "stopword": "^2.0.8"
   },
   "devDependencies": {
     "@types/node": "^20.10.0"

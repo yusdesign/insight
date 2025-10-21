@@ -1,7 +1,7 @@
 {
-  "name": "insight.js",
+  "name": "hunch.js",
   "version": "1.0.0",
-  "description": "Holistic code analysis and insight generation",
+  "description": "Trust your code's gut feelings - Anomaly and pattern detection",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
@@ -13,24 +13,21 @@
   },
   "keywords": [
     "code-analysis",
-    "holistic",
-    "insight",
-    "architecture",
-    "code-quality",
-    "ai"
+    "anomaly-detection",
+    "pattern-matching",
+    "code-smells",
+    "insight"
   ],
   "author": "yusdesign",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/yusdesign/insight.git",
-    "directory": "packages/insight.js"
+    "directory": "packages/hunch.js"
   },
   "dependencies": {
-    "esbuild": "^0.25.11",
-    "esbuild-node-externals": "^1.18.0",
     "stemmer": "^2.0.1",
-    "stopword": "^3.1.5"
+    "stopword": "^2.0.8"
   },
   "devDependencies": {
     "@types/node": "^20.10.0"

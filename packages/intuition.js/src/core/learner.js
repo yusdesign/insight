@@ -1,188 +1,241 @@
-/**
- * PatternLearner - Learns and recognizes code patterns
- */
+import { removeStopwords } from 'stopword';
+import { stemmer } from 'stemmer';
+
 export class PatternLearner {
-  constructor(options = {}) {
+  constructor(config = {}) {
+    this.config = config;
     this.patterns = new Map();
-    this.learningRate = options.learningRate || 0.1;
-    this.confidenceThreshold = options.confidenceThreshold || 0.7;
+    this.categories = new Set();
+    this.learningStats = {
+      samplesProcessed: 0,
+      patternsLearned: 0,
+      categoriesLearned: 0
+    };
   }
 
-  async train(examples, labels = {}) {
-    const results = {
-      learnedPatterns: 0,
-      patterns: [],
-      confidence: 0
-    };
-
-    examples.forEach((example, index) => {
-      const pattern = this.extractPattern(example);
-      const label = labels[index] || this.inferLabel(example);
+  async learnFromSamples(codeSamples, labels = []) {
+    try {
+      const learningResults = [];
       
-      if (pattern && label) {
-        this.patterns.set(label, {
-          pattern,
-          examples: [...(this.patterns.get(label)?.examples || []), example],
-          confidence: this.updateConfidence(label, pattern),
-          lastTrained: new Date()
-        });
-        results.learnedPatterns++;
-        results.patterns.push({ 
-          label, 
-          pattern: JSON.stringify(pattern).slice(0, 50) + '...' 
-        });
+      for (let i = 0; i < codeSamples.length; i++) {
+        const code = codeSamples[i];
+        const label = labels[i] || 'general';
+        
+        const learned = this.learnFromSample(code, label);
+        learningResults.push(learned);
+        
+        this.learningStats.samplesProcessed++;
       }
-    });
-
-    results.confidence = this.calculateOverallConfidence();
-    return results;
+      
+      return {
+        success: true,
+        patternsLearned: this.learningStats.patternsLearned,
+        categoriesLearned: this.categories.size,
+        samplesProcessed: this.learningStats.samplesProcessed,
+        patterns: Array.from(this.patterns.entries()),
+        categories: Array.from(this.categories)
+      };
+    } catch (error) {
+      console.error('Learning error:', error);
+      return {
+        success: false,
+        error: error.message,
+        patternsLearned: this.learningStats.patternsLearned,
+        categoriesLearned: this.categories.size
+      };
+    }
   }
 
-  async recognize(code, context = {}) {
-    const analysis = {
-      recognizedPatterns: [],
-      confidence: 0,
-      suggestions: []
-    };
-
-    const codePattern = this.extractPattern(code);
+  learnFromSample(code, category) {
+    // Extract features from code
+    const features = this.extractFeatures(code);
+    const patterns = this.extractPatterns(code);
+    const keywords = this.extractKeywords(code);
     
-    for (const [label, patternData] of this.patterns.entries()) {
-      const similarity = this.calculatePatternSimilarity(codePattern, patternData.pattern);
-      
-      if (similarity >= this.confidenceThreshold) {
-        analysis.recognizedPatterns.push({
-          label,
-          confidence: similarity,
-          pattern: JSON.stringify(patternData.pattern).slice(0, 50) + '...',
-          examples: patternData.examples.length
+    // Store learned patterns
+    const patternKey = `${category}:${this.generatePatternHash(patterns)}`;
+    
+    if (!this.patterns.has(patternKey)) {
+      this.patterns.set(patternKey, {
+        category,
+        patterns,
+        features,
+        keywords,
+        frequency: 1,
+        confidence: 0.7,
+        examples: [code.substring(0, 200)] // Store code snippet
+      });
+      this.learningStats.patternsLearned++;
+    } else {
+      // Update existing pattern
+      const existing = this.patterns.get(patternKey);
+      existing.frequency++;
+      existing.confidence = Math.min(existing.confidence + 0.1, 0.95);
+    }
+    
+    this.categories.add(category);
+    
+    return {
+      category,
+      patternsFound: patterns.length,
+      features: Object.keys(features).length,
+      keywords: keywords.length
+    };
+  }
+
+  extractFeatures(code) {
+    return {
+      hasLoops: /(for|while|forEach|map)/i.test(code),
+      hasConditionals: /(if|else|switch|case)/i.test(code),
+      hasFunctions: /function|=>|\(\)\s*=>/.test(code),
+      hasAsync: /async|await|Promise/.test(code),
+      hasErrorHandling: /try|catch|finally|throw/.test(code),
+      hasClasses: /class|constructor|this\./.test(code),
+      lineCount: code.split('\n').length,
+      complexity: this.calculateComplexity(code)
+    };
+  }
+
+  extractPatterns(code) {
+    const patterns = [];
+    
+    // Common code patterns
+    const patternDefinitions = {
+      'function-definition': /(function\s+\w+|const\s+\w+\s*=\s*\([^)]*\)\s*=>|async\s+function)/g,
+      'method-call': /\.\w+\([^)]*\)/g,
+      'variable-declaration': /(const|let|var)\s+\w+/g,
+      'conditional-statement': /(if|else if|switch)\s*\([^)]*\)/g,
+      'loop-statement': /(for|while)\s*\([^)]*\)/g,
+      'error-handling': /(try|catch)\s*\{/g
+    };
+    
+    for (const [patternName, regex] of Object.entries(patternDefinitions)) {
+      const matches = code.match(regex);
+      if (matches) {
+        patterns.push({
+          type: patternName,
+          count: matches.length,
+          examples: matches.slice(0, 3) // First 3 examples
         });
       }
     }
-
-    analysis.recognizedPatterns.sort((a, b) => b.confidence - a.confidence);
-    analysis.confidence = analysis.recognizedPatterns.length > 0 
-      ? analysis.recognizedPatterns[0].confidence 
-      : 0;
-
-    analysis.suggestions = this.generateSuggestions(code, analysis.recognizedPatterns);
-    return analysis;
-  }
-
-  extractPattern(code) {
-    // Extract structural pattern from code
-    return {
-      structure: this.extractStructure(code),
-      keywords: this.extractKeywords(code),
-      complexity: this.calculateComplexity(code),
-      length: code.length
-    };
-  }
-
-  extractStructure(code) {
-    // Simplified structure extraction
-    const structures = [];
     
-    if (code.includes('function')) structures.push('function');
-    if (code.includes('class')) structures.push('class');
-    if (code.includes('=>')) structures.push('arrow-function');
-    if (code.includes('import') || code.includes('require')) structures.push('module');
-    if (code.includes('if') || code.includes('switch')) structures.push('conditional');
-    if (code.includes('for') || code.includes('while')) structures.push('loop');
-    
-    return structures;
+    return patterns;
   }
 
   extractKeywords(code) {
-    const keywords = code.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
-    const stopWords = new Set(['function', 'const', 'let', 'var', 'return', 'if', 'else']);
-    return [...new Set(keywords.filter(word => !stopWords.has(word)))].slice(0, 10);
+    // Remove comments and strings for cleaner keyword extraction
+    const cleanCode = code
+      .replace(/\/\/[^\n]*/g, '')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/['"`][^'"`]*['"`]/g, '');
+    
+    const words = cleanCode
+      .toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 2 && word.length < 20);
+    
+    const withoutStopwords = removeStopwords(words);
+    const stemmed = withoutStopwords.map(word => stemmer(word));
+    
+    // Count frequency and return top keywords
+    const frequency = {};
+    stemmed.forEach(word => {
+      frequency[word] = (frequency[word] || 0) + 1;
+    });
+    
+    return Object.entries(frequency)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 15)
+      .map(([word, count]) => ({ word, count, weight: count / stemmed.length }));
   }
 
   calculateComplexity(code) {
-    let complexity = 0;
-    complexity += (code.match(/if|else|switch/g) || []).length;
-    complexity += (code.match(/for|while|do/g) || []).length;
-    complexity += (code.match(/&&|\|\|/g) || []).length;
-    return complexity;
-  }
-
-  inferLabel(code) {
-    const keywords = this.extractKeywords(code);
-    return keywords.length > 0 ? keywords[0] + '-pattern' : 'unknown-pattern';
-  }
-
-  calculatePatternSimilarity(pattern1, pattern2) {
-    let score = 0;
-    
-    // Structure similarity
-    const structureOverlap = pattern1.structure.filter(s => 
-      pattern2.structure.includes(s)
-    ).length;
-    score += (structureOverlap / Math.max(pattern1.structure.length, pattern2.structure.length, 1)) * 0.4;
-
-    // Keyword similarity
-    const keywordOverlap = pattern1.keywords.filter(k => 
-      pattern2.keywords.includes(k)
-    ).length;
-    score += (keywordOverlap / Math.max(pattern1.keywords.length, pattern2.keywords.length, 1)) * 0.4;
-
-    // Complexity similarity (normalized)
-    const complexityDiff = Math.abs(pattern1.complexity - pattern2.complexity);
-    score += (1 - Math.min(complexityDiff / 10, 1)) * 0.2;
-
-    return Math.min(score, 1.0);
-  }
-
-  updateConfidence(label, pattern) {
-    const existing = this.patterns.get(label);
-    if (!existing) return 0.5;
-    
-    return Math.min(existing.confidence + this.learningRate, 1.0);
-  }
-
-  calculateOverallConfidence() {
-    if (this.patterns.size === 0) return 0;
-    
-    let totalConfidence = 0;
-    for (const pattern of this.patterns.values()) {
-      totalConfidence += pattern.confidence;
-    }
-    
-    return totalConfidence / this.patterns.size;
-  }
-
-  generateSuggestions(code, recognizedPatterns) {
-    const suggestions = [];
-    
-    if (recognizedPatterns.length > 0) {
-      suggestions.push(`This code resembles "${recognizedPatterns[0].label}" pattern`);
-    }
-    
-    if (this.calculateComplexity(code) > 5) {
-      suggestions.push('Consider simplifying complex logic');
-    }
-    
-    return suggestions;
-  }
-
-  async suggestRefactoring(code) {
-    const recognition = await this.recognize(code);
+    const lines = code.split('\n').length;
+    const nesting = this.calculateNestingDepth(code);
+    const decisionPoints = (code.match(/(if|else|case|default|\?|&&|\|\|)/g) || []).length;
     
     return {
-      originalCode: code.slice(0, 100) + '...',
-      suggestions: recognition.suggestions,
-      patterns: recognition.recognizedPatterns,
-      refactoringConfidence: recognition.confidence
+      cyclomatic: decisionPoints + 1,
+      nestingDepth: nesting,
+      lineCount: lines,
+      score: Math.min((decisionPoints + nesting) / 10, 1.0)
     };
   }
 
-  getLearnedPatterns() {
-    return Array.from(this.patterns.entries()).map(([label, data]) => ({
-      label,
-      examples: data.examples.length,
-      confidence: data.confidence,
-      lastTrained: data.lastTrained
-    }));
+  calculateNestingDepth(code) {
+    let maxDepth = 0;
+    let currentDepth = 0;
+    
+    for (const char of code) {
+      if (char === '{') {
+        currentDepth++;
+        maxDepth = Math.max(maxDepth, currentDepth);
+      } else if (char === '}') {
+        currentDepth--;
+      }
+    }
+    
+    return maxDepth;
+  }
+
+  generatePatternHash(patterns) {
+    const patternString = patterns.map(p => `${p.type}:${p.count}`).join('|');
+    return this.simpleHash(patternString);
+  }
+
+  simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString(36);
+  }
+
+  getLearnedPatterns(category = null) {
+    if (category) {
+      return Array.from(this.patterns.entries())
+        .filter(([, pattern]) => pattern.category === category)
+        .map(([key, pattern]) => pattern);
+    }
+    return Array.from(this.patterns.values());
+  }
+
+  getPatternConfidence(category, features) {
+    const categoryPatterns = this.getLearnedPatterns(category);
+    if (categoryPatterns.length === 0) return 0.1;
+    
+    let totalSimilarity = 0;
+    
+    for (const pattern of categoryPatterns) {
+      const similarity = this.calculateFeatureSimilarity(features, pattern.features);
+      totalSimilarity += similarity * pattern.confidence;
+    }
+    
+    return Math.min(totalSimilarity / categoryPatterns.length, 0.95);
+  }
+
+  calculateFeatureSimilarity(features1, features2) {
+    const keys = new Set([...Object.keys(features1), ...Object.keys(features2)]);
+    let matches = 0;
+    let total = 0;
+    
+    for (const key of keys) {
+      if (features1[key] !== undefined && features2[key] !== undefined) {
+        if (typeof features1[key] === 'boolean' && typeof features2[key] === 'boolean') {
+          if (features1[key] === features2[key]) matches++;
+        } else if (typeof features1[key] === 'number' && typeof features2[key] === 'number') {
+          const diff = Math.abs(features1[key] - features2[key]);
+          const max = Math.max(features1[key], features2[key]);
+          if (max > 0) matches += 1 - (diff / max);
+        }
+        total++;
+      }
+    }
+    
+    return total > 0 ? matches / total : 0;
   }
 }
