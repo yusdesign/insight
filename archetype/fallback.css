@@ -253,3 +253,75 @@ button:hover {
         margin: 5px 0;
     }
 }
+
+/* GitHub Dark Theme Colors for Insight Suite */
+:root {
+  --gh-bg-primary: #0d1117;
+  --gh-bg-secondary: #161b22;
+  --gh-border: #30363d;
+  --gh-text-primary: #c9d1d9;
+  --gh-text-secondary: #8b949e;
+  --gh-accent: #58a6ff;
+  --gh-success: #3fb950;
+  --gh-attention: #d29922;
+}
+
+/* Apply to your existing structure */
+body {
+  background-color: var(--gh-bg-primary);
+  color: var(--gh-text-primary);
+}
+
+/* Header and navigation */
+header {
+  background-color: var(--gh-bg-secondary);
+  border-bottom: 1px solid var(--gh-border);
+}
+
+nav a {
+  color: var(--gh-text-primary);
+}
+
+nav a:hover {
+  color: var(--gh-accent);
+}
+
+/* Cards and containers */
+.card, .panel, .container {
+  background-color: var(--gh-bg-secondary);
+  border: 1px solid var(--gh-border);
+  color: var(--gh-text-primary);
+}
+
+/* Buttons */
+button, .btn {
+  background-color: var(--gh-bg-secondary);
+  border: 1px solid var(--gh-border);
+  color: var(--gh-text-primary);
+}
+
+button:hover, .btn:hover {
+  background-color: var(--gh-accent);
+  border-color: var(--gh-accent);
+}
+
+/* Text elements */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--gh-text-primary);
+}
+
+p, .description {
+  color: var(--gh-text-secondary);
+}
+
+/* Links */
+a {
+  color: var(--gh-accent);
+}
+
+/* Form elements */
+input, select, textarea {
+  background-color: var(--gh-bg-secondary);
+  border: 1px solid var(--gh-border);
+  color: var(--gh-text-primary);
+}
