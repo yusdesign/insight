@@ -1,0 +1,311 @@
+/* Fix progression tracker styling */
+.progression-tracker {
+    display: flex;
+    background: var(--gh-bg-primary);
+    padding: 15px;
+    border-bottom: 1px solid var(--gh-border);
+    gap: 8px;
+}
+
+.stage {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: 6px;
+    background: var(--gh-bg-secondary);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--gh-border);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stage.active {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: var(--gh-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+}
+
+.stage-emoji {
+    font-size: 1.5em;
+    margin-bottom: 6px;
+}
+
+.stage-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--gh-text-primary);
+    font-size: 0.9em;
+}
+
+.stage-confidence {
+    font-size: 0.8em;
+    color: var(--gh-text-secondary);
+    font-weight: 500;
+}
+
+.stage.active .stage-confidence {
+    color: var(--gh-accent);
+    font-weight: 600;
+}
+
+/* Stage-specific colors with better visibility */
+.stage.point.active { border-left: 4px solid var(--gh-error); }
+.stage.hunch.active { border-left: 4px solid var(--gh-attention); }
+.stage.intuition.active { border-left: 4px solid #bc8cff; }
+.stage.insight.active { border-left: 4px solid var(--gh-accent); }
+.stage.archetype.active { border-left: 4px solid var(--gh-success); }
+
+/* Mini progression in results */
+.progression-mini {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: var(--gh-bg-primary);
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
+}
+
+.stage-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--gh-bg-secondary);
+    border: 1px solid var(--gh-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-height: 50px;
+}
+
+.stage-mini.active {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: var(--gh-accent);
+    transform: scale(1.02);
+}
+
+.stage-emoji-mini {
+    font-size: 1.2em;
+}
+
+.stage-info-mini {
+    flex: 1;
+}
+
+.stage-name-mini {
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--gh-text-primary);
+    margin-bottom: 2px;
+}
+
+.stage-desc-mini {
+    font-size: 0.75em;
+    color: var(--gh-text-secondary);
+    line-height: 1.2;
+}
+
+/* Confidence percentage styling */
+.confidence-percentage {
+    font-size: 0.7em;
+    background: var(--gh-success);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+/* Results layout fixes */
+.results-layout {
+    min-height: 400px;
+}
+
+.stage-results {
+    position: relative;
+}
+
+.result-stage {
+    display: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.result-stage.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Single window layout */
+.playground {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+    height: calc(100vh - 180px);
+    min-height: 600px;
+}
+
+.code-panel {
+    min-height: 300px;
+}
+
+.output-panel {
+    min-height: 400px;
+    background: var(--gh-bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
+    padding: 20px;
+}
+
+.visualization-panel {
+    min-height: 300px;
+    background: var(--gh-bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
+    padding: 20px;
+}
+
+/* Ensure consistent panel headers */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gh-border);
+}
+
+.panel-header h3 {
+    color: var(--gh-text-primary);
+    margin: 0;
+    font-size: 1.2em;
+}
+
+/* Button consistency */
+.btn {
+    padding: 8px 16px;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    background: var(--gh-bg-secondary);
+    color: var(--gh-text-primary);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--gh-accent);
+    border-color: var(--gh-accent);
+    color: white;
+}
+
+.btn-primary {
+    background: var(--gh-success);
+    border-color: var(--gh-success);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2ea043;
+    border-color: #2ea043;
+}
+
+/* Form elements consistency */
+select, input, textarea {
+    background: var(--gh-bg-primary);
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    color: var(--gh-text-primary);
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+select:focus, input:focus, textarea:focus {
+    outline: 2px solid var(--gh-accent);
+    outline-offset: -1px;
+}
+
+/* Results cards consistency */
+.result-card {
+    background: var(--gh-bg-primary);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 15px;
+    border: 1px solid var(--gh-border);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.result-card h4 {
+    color: var(--gh-text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+}
+
+/* Loading states */
+.mermaid-loading, .welcome-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gh-text-secondary);
+}
+
+.welcome-message h4 {
+    color: var(--gh-text-primary);
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    .progression-tracker {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .stage {
+        min-height: 60px;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 10px 15px;
+    }
+    
+    .stage-emoji {
+        margin-bottom: 0;
+        margin-right: 10px;
+        font-size: 1.3em;
+    }
+    
+    .progression-mini {
+        flex-direction: column;
+    }
+    
+    .stage-mini {
+        min-height: 45px;
+    }
+}
