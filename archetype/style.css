@@ -6,42 +6,57 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gh-bg-primary);
+    color: var(--gh-text-primary);
     min-height: 100vh;
     padding: 20px;
+}
+
+:root {
+    --gh-bg-primary: #0d1117;
+    --gh-bg-secondary: #161b22;
+    --gh-border: #30363d;
+    --gh-text-primary: #c9d1d9;
+    --gh-text-secondary: #8b949e;
+    --gh-accent: #58a6ff;
+    --gh-success: #3fb950;
+    --gh-attention: #d29922;
+    --gh-error: #f85149;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    background: var(--gh-bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
     overflow: hidden;
 }
 
 header {
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    color: white;
+    background: var(--gh-bg-secondary);
+    color: var(--gh-text-primary);
     padding: 30px;
     text-align: center;
+    border-bottom: 1px solid var(--gh-border);
 }
 
 header h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
+    color: var(--gh-text-primary);
 }
 
 header p {
     font-size: 1.2em;
-    opacity: 0.9;
+    color: var(--gh-text-secondary);
 }
 
 .progression-tracker {
     display: flex;
-    background: #f8f9fa;
+    background: var(--gh-bg-primary);
     padding: 20px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--gh-border);
 }
 
 .stage {
@@ -49,11 +64,12 @@ header p {
     text-align: center;
     padding: 15px;
     margin: 0 10px;
-    border-radius: 10px;
-    background: #e9ecef;
+    border-radius: 6px;
+    background: var(--gh-bg-secondary);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--gh-border);
 }
 
 .stage::before {
@@ -63,7 +79,7 @@ header p {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.1), transparent);
     transition: left 0.5s ease;
 }
 
@@ -79,20 +95,20 @@ header p {
 .stage-name {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #495057;
+    color: var(--gh-text-primary);
 }
 
 .stage-confidence {
     font-size: 0.9em;
-    color: #6c757d;
+    color: var(--gh-text-secondary);
 }
 
 /* Stage-specific colors */
-.stage.point { border-left: 4px solid #e74c3c; }
-.stage.hunch { border-left: 4px solid #f39c12; }
-.stage.intuition { border-left: 4px solid #9b59b6; }
-.stage.insight { border-left: 4px solid #3498db; }
-.stage.archetype { border-left: 4px solid #2ecc71; }
+.stage.point { border-left: 4px solid var(--gh-error); }
+.stage.hunch { border-left: 4px solid var(--gh-attention); }
+.stage.intuition { border-left: 4px solid #bc8cff; }
+.stage.insight { border-left: 4px solid var(--gh-accent); }
+.stage.archetype { border-left: 4px solid var(--gh-success); }
 
 .playground {
     display: grid;
@@ -107,7 +123,7 @@ header p {
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid var(--gh-border);
 }
 
 .controls {
@@ -117,33 +133,36 @@ header p {
 
 select, button {
     padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: white;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
+    background: var(--gh-bg-secondary);
+    color: var(--gh-text-primary);
     cursor: pointer;
 }
 
 button {
-    background: #3498db;
+    background: var(--gh-accent);
     color: white;
-    border: none;
+    border: 1px solid var(--gh-accent);
     font-weight: bold;
 }
 
 button:hover {
-    background: #2980b9;
+    background: #388bfd;
+    border-color: #388bfd;
 }
 
 #codeInput {
     width: 100%;
     height: 300px;
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--gh-border);
+    border-radius: 6px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     resize: vertical;
-    background: #f8f9fa;
+    background: var(--gh-bg-primary);
+    color: var(--gh-text-primary);
 }
 
 #analyzeBtn {
@@ -151,11 +170,19 @@ button:hover {
     padding: 15px;
     font-size: 1.1em;
     margin-top: 15px;
+    background: var(--gh-success);
+    border-color: var(--gh-success);
+}
+
+#analyzeBtn:hover {
+    background: #2ea043;
+    border-color: #2ea043;
 }
 
 .output-panel {
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: var(--gh-bg-primary);
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
     padding: 20px;
 }
 
@@ -166,7 +193,7 @@ button:hover {
 }
 
 .confidence-badge {
-    background: #2ecc71;
+    background: var(--gh-success);
     color: white;
     padding: 5px 10px;
     border-radius: 15px;
@@ -176,12 +203,12 @@ button:hover {
 .welcome-message {
     text-align: center;
     padding: 40px 20px;
-    color: #6c757d;
+    color: var(--gh-text-secondary);
 }
 
 .welcome-message h4 {
     margin-bottom: 20px;
-    color: #2c3e50;
+    color: var(--gh-text-primary);
 }
 
 .welcome-message ul {
@@ -193,31 +220,33 @@ button:hover {
 .welcome-message li {
     margin-bottom: 10px;
     padding-left: 10px;
+    color: var(--gh-text-secondary);
 }
 
 .visualization-panel {
     padding: 30px;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid var(--gh-border);
+    background: var(--gh-bg-secondary);
 }
 
 #mermaidChart {
-    background: white;
+    background: var(--gh-bg-primary);
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    border: 1px solid var(--gh-border);
 }
 
 /* Result cards */
 .result-card {
-    background: white;
-    border-radius: 8px;
+    background: var(--gh-bg-secondary);
+    border-radius: 6px;
     padding: 15px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid var(--gh-border);
 }
 
 .result-card h4 {
-    color: #2c3e50;
+    color: var(--gh-text-primary);
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -226,7 +255,7 @@ button:hover {
 
 .confidence-bar {
     height: 6px;
-    background: #e9ecef;
+    background: var(--gh-bg-primary);
     border-radius: 3px;
     margin: 10px 0;
     overflow: hidden;
@@ -234,7 +263,7 @@ button:hover {
 
 .confidence-fill {
     height: 100%;
-    background: linear-gradient(90deg, #e74c3c, #2ecc71);
+    background: linear-gradient(90deg, var(--gh-error), var(--gh-success));
     transition: width 0.5s ease;
 }
 
@@ -254,74 +283,28 @@ button:hover {
     }
 }
 
-/* GitHub Dark Theme Colors for Insight Suite */
-:root {
-  --gh-bg-primary: #0d1117;
-  --gh-bg-secondary: #161b22;
-  --gh-border: #30363d;
-  --gh-text-primary: #c9d1d9;
-  --gh-text-secondary: #8b949e;
-  --gh-accent: #58a6ff;
-  --gh-success: #3fb950;
-  --gh-attention: #d29922;
+/* Additional GitHub Dark refinements */
+select:focus, 
+button:focus, 
+#codeInput:focus {
+    outline: 2px solid var(--gh-accent);
+    outline-offset: -1px;
 }
 
-/* Apply to your existing structure */
-body {
-  background-color: var(--gh-bg-primary);
-  color: var(--gh-text-primary);
+/* Scrollbar styling for dark theme */
+#results::-webkit-scrollbar {
+    width: 8px;
 }
 
-/* Header and navigation */
-header {
-  background-color: var(--gh-bg-secondary);
-  border-bottom: 1px solid var(--gh-border);
+#results::-webkit-scrollbar-track {
+    background: var(--gh-bg-primary);
 }
 
-nav a {
-  color: var(--gh-text-primary);
+#results::-webkit-scrollbar-thumb {
+    background: var(--gh-border);
+    border-radius: 4px;
 }
 
-nav a:hover {
-  color: var(--gh-accent);
-}
-
-/* Cards and containers */
-.card, .panel, .container {
-  background-color: var(--gh-bg-secondary);
-  border: 1px solid var(--gh-border);
-  color: var(--gh-text-primary);
-}
-
-/* Buttons */
-button, .btn {
-  background-color: var(--gh-bg-secondary);
-  border: 1px solid var(--gh-border);
-  color: var(--gh-text-primary);
-}
-
-button:hover, .btn:hover {
-  background-color: var(--gh-accent);
-  border-color: var(--gh-accent);
-}
-
-/* Text elements */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--gh-text-primary);
-}
-
-p, .description {
-  color: var(--gh-text-secondary);
-}
-
-/* Links */
-a {
-  color: var(--gh-accent);
-}
-
-/* Form elements */
-input, select, textarea {
-  background-color: var(--gh-bg-secondary);
-  border: 1px solid var(--gh-border);
-  color: var(--gh-text-primary);
+#results::-webkit-scrollbar-thumb:hover {
+    background: var(--gh-text-secondary);
 }
