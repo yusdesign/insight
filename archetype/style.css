@@ -1,0 +1,305 @@
+:root {
+    --github-dark-bg: #0d1117;
+    --github-dark-secondary: #161b22;
+    --github-dark-border: #30363d;
+    --github-dark-text: #c9d1d9;
+    --github-dark-text-secondary: #8b949e;
+    --github-blue: #58a6ff;
+    --github-green: #3fb950;
+    --github-purple: #bc8cff;
+    --github-orange: #ffa657;
+    --github-red: #ff7b72;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background-color: var(--github-dark-bg);
+    color: var(--github-dark-text);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--github-dark-border);
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--github-dark-text);
+    display: flex;
+    align-items: center;
+}
+
+.logo span {
+    color: var(--github-blue);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav li {
+    margin-left: 20px;
+}
+
+nav a {
+    color: var(--github-dark-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: var(--github-blue);
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.sidebar {
+    background-color: var(--github-dark-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--github-dark-border);
+    padding: 20px;
+}
+
+.archetype-list {
+    list-style: none;
+}
+
+.archetype-item {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.archetype-item:hover {
+    background-color: rgba(88, 166, 255, 0.1);
+}
+
+.archetype-item.active {
+    background-color: rgba(88, 166, 255, 0.2);
+    border-left: 3px solid var(--github-blue);
+}
+
+.archetype-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.icon-blue {
+    background-color: var(--github-blue);
+}
+
+.icon-green {
+    background-color: var(--github-green);
+}
+
+.icon-purple {
+    background-color: var(--github-purple);
+}
+
+.icon-orange {
+    background-color: var(--github-orange);
+}
+
+.playground {
+    background-color: var(--github-dark-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--github-dark-border);
+    overflow: hidden;
+}
+
+.playground-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--github-dark-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playground-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.playground-actions {
+    display: flex;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--github-dark-border);
+    background-color: var(--github-dark-secondary);
+    color: var(--github-dark-text);
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    background-color: rgba(88, 166, 255, 0.1);
+    border-color: var(--github-blue);
+}
+
+.btn-primary {
+    background-color: var(--github-green);
+    border-color: var(--github-green);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2ea043;
+    border-color: #2ea043;
+}
+
+.playground-content {
+    padding: 20px;
+    min-height: 400px;
+}
+
+.archetype-details {
+    margin-bottom: 30px;
+}
+
+.archetype-name {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--github-blue);
+}
+
+.archetype-description {
+    color: var(--github-dark-text-secondary);
+    margin-bottom: 20px;
+}
+
+.attributes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.attribute {
+    background-color: rgba(22, 27, 34, 0.7);
+    border-radius: 6px;
+    padding: 15px;
+    border: 1px solid var(--github-dark-border);
+}
+
+.attribute-title {
+    font-size: 14px;
+    color: var(--github-dark-text-secondary);
+    margin-bottom: 5px;
+}
+
+.attribute-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.visualization {
+    margin-top: 30px;
+}
+
+.visualization-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--github-blue);
+}
+
+.chart-container {
+    background-color: rgba(22, 27, 34, 0.7);
+    border-radius: 6px;
+    padding: 20px;
+    border: 1px solid var(--github-dark-border);
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+}
+
+.bar {
+    width: 40px;
+    background-color: var(--github-blue);
+    border-radius: 3px 3px 0 0;
+    position: relative;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--github-dark-text-secondary);
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--github-dark-border);
+    color: var(--github-dark-text-secondary);
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    nav {
+        margin-top: 15px;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+    }
+    
+    nav li {
+        margin: 5px 10px 5px 0;
+    }
+}
