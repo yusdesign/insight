@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Insight Suite Analysis - communication</title></head>
+<body>
+    <h1>Insight Suite Analysis - communication</h1>
+    <img src="https://www.plantuml.com/plantuml/png/PLFDZjCm4BxxAKRgWP_I2Eq5gLfLMxKLohBRTflqW2X2hZDDl4hiOZkm5G9nuGWSu8H085w0Ay-pBm2Fm3X9wNRtaioCFt_ppOpdo3fkN5daZ3dfSeJZw61-UW93n3Nq5SytLjg5ck4BvBbKAGnqWX2RqcKKPhTWEfzD9z6e2q8NHQcau4vgjL1qqe_ZqMmSTU69NfwZS32fVa_lNGzuzDcyVnB6Zo6Celc8xXpuO3YEvs4SJiOG3IOpId8_U407JEJSMXXonwToZQGBuHK320AO6hr6uoHQyXOAe4C5fcZfj2EuoF2_yGWttZPeoznvg-FXH14gXsR51JOCRQ6LTQOKJflRTmZPvaaIUTRQMnijqDhQMMqnAIeqtE6WoLL5ztDGTs5kYQT9zERc7JWyb0sqrwlAsJACBXg68QvH9QZ4hkRMkTKg8CqqCBdQ40bUx4XUiwP_Mufd_MbejmrycEibiLQXA_Nh78ExbNSSJSQDUSfTrfZKzqBQ1dCZtzwaWg2tKr_bkOg7bi6abHg-OKnfXx3Kpka2z6fltYJsykixw1kHIKTlg3G8aJEeKdgONI_YykrF6EJ85T0B89w2AsfrWSej53KCF3bZEQRUCJBD_2Fu-_tpUngEzIv49L5VtmIF-VGDeao_j90WTPBqGXjAM_ssXLGAllpuy_iZGBqy5ZAPq9peqcvWDT-7N_k5F2zfrzm6P2t4Le9hfOmTqPVszHy0" alt="UML Diagram">
+    <p><a href="https://www.plantuml.com/plantuml/umla/PLFDZjCm4BxxAKRgWP_I2Eq5gLfLMxKLohBRTflqW2X2hZDDl4hiOZkm5G9nuGWSu8H085w0Ay-pBm2Fm3X9wNRtaioCFt_ppOpdo3fkN5daZ3dfSeJZw61-UW93n3Nq5SytLjg5ck4BvBbKAGnqWX2RqcKKPhTWEfzD9z6e2q8NHQcau4vgjL1qqe_ZqMmSTU69NfwZS32fVa_lNGzuzDcyVnB6Zo6Celc8xXpuO3YEvs4SJiOG3IOpId8_U407JEJSMXXonwToZQGBuHK320AO6hr6uoHQyXOAe4C5fcZfj2EuoF2_yGWttZPeoznvg-FXH14gXsR51JOCRQ6LTQOKJflRTmZPvaaIUTRQMnijqDhQMMqnAIeqtE6WoLL5ztDGTs5kYQT9zERc7JWyb0sqrwlAsJACBXg68QvH9QZ4hkRMkTKg8CqqCBdQ40bUx4XUiwP_Mufd_MbejmrycEibiLQXA_Nh78ExbNSSJSQDUSfTrfZKzqBQ1dCZtzwaWg2tKr_bkOg7bi6abHg-OKnfXx3Kpka2z6fltYJsykixw1kHIKTlg3G8aJEeKdgONI_YykrF6EJ85T0B89w2AsfrWSej53KCF3bZEQRUCJBD_2Fu-_tpUngEzIv49L5VtmIF-VGDeao_j90WTPBqGXjAM_ssXLGAllpuy_iZGBqy5ZAPq9peqcvWDT-7N_k5F2zfrzm6P2t4Le9hfOmTqPVszHy0" target="_blank">Open in PlantUML Editor</a></p>
+    <pre>@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: communication\n' PATTERNS: [object Object], [object Object]\n' QUALITY ISSUES: 2\n' INTUITION SCORE: 0.72\n
+class DataPipeline {
+  .. Properties ..\n  -stages
+  -cache
+  -cacheKey
+  -result
+  --\n  .. Interface ..\n  +constructor()
+  +addStage()
+  +process()
+  +for()
+  +generateCacheKey()
+  --\n  .. Internal Usage ..\n  ~generateCacheKey() <<internal>>\n  --\n  .. External Dependencies ..\n  #json.stringify <<external>>\n}
+
+class External_APIs {
+  .. Global APIs ..\n  +console.*\n  +JSON.*\n  +Math.*\n  +Promise.*\n  <<external>>\n}
+
+DataPipeline ..> External APIs <<external>> #red#gray
+
+note bottom of DataPipeline
+  ✅ Architecture Strengths:\n  • Clean state management\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml</pre>
+</body>
+</html>

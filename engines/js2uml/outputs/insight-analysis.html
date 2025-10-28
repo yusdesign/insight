@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Insight Suite Analysis - validation</title></head>
+<body>
+    <h1>Insight Suite Analysis - validation</h1>
+    <img src="https://www.plantuml.com/plantuml/png/pPJDZjCm483lVegHE01QMg6z85LLjLMtXw2bBKs2X2W7DvacHgbTx4bX1KXSE087E27G8bw0Ay-pBy0-0kFqHsrMYxItlSIPFyytOu-F74bBvRmGWXGL20_3m_ZH2HmZBg2hPN7gb9leCIvH5afdq3CfGcHBobajRiCe7e-6ORy5IxQdafJH4ytgRXJrnuEm1S_Cz0Kc1CDgUNwlhl3UZ-FkIH0zXI0Cupx777fbC8ZY80g60mXxmp5dkDzym0QH5D8vE9OaHzOaw9ony4O0D9l0YWLQKkXOccY0HYAJ7DdOM6nydPSikh8W_zVmRXmQQ48xamck8myIentPCY5ZxznbpmEPfjk4AyrwpvKmgxJln9hloROTVMl_HwZb7Ay1iaqGExGXsgLYpoitBzcfAZZTRPTOMwvNVuRaSswRiHOOg5vhe_6s0wlVTblf7AqYr-dSoYoY5hlWpMQdTfBjTc9H4bxjNyzsEK9eGmXJGsJcO6Rx6PZ-_Fi7wDeaLyGNiBG88LdK6L_fbY_z_Fql61Z0rzmHdW18SO4wHPrmOpVsNe5I0myF9vfBBJESewPzwwAS5Ye1jUdiHFCsuDdgWBMIRYBYpYdS23nHOEO5gxBS3_B5sTUFV8cT5o4i6Qp-XdcVBpyWpCqhnqGyHHPJE02U1BziO2k2Rp___laCi7hs7EGgPVfBPLoSVVgztuQN9PyadJ9n1U8gu1Mf44VyvPVs7m00" alt="UML Diagram">
+    <p><a href="https://www.plantuml.com/plantuml/umla/pPJDZjCm483lVegHE01QMg6z85LLjLMtXw2bBKs2X2W7DvacHgbTx4bX1KXSE087E27G8bw0Ay-pBy0-0kFqHsrMYxItlSIPFyytOu-F74bBvRmGWXGL20_3m_ZH2HmZBg2hPN7gb9leCIvH5afdq3CfGcHBobajRiCe7e-6ORy5IxQdafJH4ytgRXJrnuEm1S_Cz0Kc1CDgUNwlhl3UZ-FkIH0zXI0Cupx777fbC8ZY80g60mXxmp5dkDzym0QH5D8vE9OaHzOaw9ony4O0D9l0YWLQKkXOccY0HYAJ7DdOM6nydPSikh8W_zVmRXmQQ48xamck8myIentPCY5ZxznbpmEPfjk4AyrwpvKmgxJln9hloROTVMl_HwZb7Ay1iaqGExGXsgLYpoitBzcfAZZTRPTOMwvNVuRaSswRiHOOg5vhe_6s0wlVTblf7AqYr-dSoYoY5hlWpMQdTfBjTc9H4bxjNyzsEK9eGmXJGsJcO6Rx6PZ-_Fi7wDeaLyGNiBG88LdK6L_fbY_z_Fql61Z0rzmHdW18SO4wHPrmOpVsNe5I0myF9vfBBJESewPzwwAS5Ye1jUdiHFCsuDdgWBMIRYBYpYdS23nHOEO5gxBS3_B5sTUFV8cT5o4i6Qp-XdcVBpyWpCqhnqGyHHPJE02U1BziO2k2Rp___laCi7hs7EGgPVfBPLoSVVgztuQN9PyadJ9n1U8gu1Mf44VyvPVs7m00" target="_blank">Open in PlantUML Editor</a></p>
+    <pre>@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: validation\n' PATTERNS: [object Object], [object Object]\n' QUALITY ISSUES: 2\n' INTUITION SCORE: 0.72\n
+class DataProcessor {
+  .. Properties ..\n  -cache
+  -processors
+  -result
+  --\n  .. Interface ..\n  +constructor()
+  +addProcessor()
+  +process()
+  +for()
+}
+
+class ValidationError {
+  .. Properties ..\n  -name
+  --\n  .. Interface ..\n  +constructor()
+}
+
+class UserService {
+  .. Properties ..\n  -users
+  -dataProcessor
+  -user
+  --\n  .. Interface ..\n  +constructor()
+  +getUser()
+  +addUser()
+}
+
+ValidationError --|> Error <<inherits>>#green
+UserService ..> DataProcessor <<creates>>#green
+UserService ..> ValidationError <<creates>>#green
+
+note bottom of DataProcessor
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of ValidationError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml</pre>
+</body>
+</html>

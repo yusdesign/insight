@@ -1,0 +1,65 @@
+@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: E-commerce Order System\n' PATTERNS: Service Layer, Inventory Management, Notification\n' QUALITY ISSUES: 2\n' INTUITION SCORE: 0.8\n
+class OrderService {
+  .. Properties ..\n  -orders
+  -inventory
+  -notifier
+  -available
+  -order
+  -paymentResult
+  --\n  .. Interface ..\n  +constructor()
+  +placeOrder()
+  +if()
+  +processPayment()
+  +getOrder()
+  --\n  .. Internal Usage ..\n  ~processPayment() <<internal>>\n  --\n  .. External Dependencies ..\n  #console.log <<external>>\n  #math.random <<external>>\n}
+
+class InventoryService {
+  .. Properties ..\n  -stock
+  -item
+  -currentStock
+  -current
+  --\n  .. Interface ..\n  +constructor()
+  +checkAvailability()
+  +updateStock()
+}
+
+class EmailNotifier {
+  .. Interface ..\n  +sendConfirmation()
+  .. External Dependencies ..\n  #console.log <<external>>\n}
+
+class Order {
+  .. Properties ..\n  -id
+  -userEmail
+  -items
+  -total
+  -createdAt
+  -status
+  -completedAt
+  --\n  .. Interface ..\n  +constructor()
+  +complete()
+  +cancel()
+}
+
+class External_APIs {
+  .. Global APIs ..\n  +console.*\n  +JSON.*\n  +Math.*\n  +Promise.*\n  <<external>>\n}
+
+OrderService ..> InventoryService <<creates>>#green
+OrderService ..> EmailNotifier <<creates>>#green
+OrderService ..> Order <<creates>>#green
+OrderService ..> External APIs <<external>> #red#gray
+EmailNotifier ..> External APIs <<external>> #red#gray
+
+note bottom of InventoryService
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of EmailNotifier
+  ✅ Architecture Strengths:\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of Order
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml

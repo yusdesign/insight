@@ -1,0 +1,40 @@
+============================================================
+INSIGHT SUITE ARCHITECTURE ANALYSIS
+============================================================
+
+Purpose: validation
+Intuition Score: 72.0%
+Patterns Found: 2
+Anomalies: 2
+
+┌─ DataProcessor ─────────────────────┐
+│ processors                           │
+│ result                               │
+│ addProcessor()                       │
+│ process()                            │
+│ for()                                │
+└──────────────────────────────────────┘
+
+┌─ ValidationError ───────────────────┐
+└──────────────────────────────────────┘
+
+┌─ UserService ───────────────────────┐
+│ dataProcessor                        │
+│ user                                 │
+│ getUser()                            │
+│ addUser()                            │
+└──────────────────────────────────────┘
+
+  ValidationError → Error (inheritance)
+
+────────────────────────────────────────
+ANOMALIES REQUIRING ATTENTION:
+────────────────────────────────────────
+1. Memory: Potential memory leak in cache
+2. Validation: Missing input validation
+
+────────────────────────────────────────
+ARCHITECTURE PATTERNS:
+────────────────────────────────────────
+1. Repository Pattern (90% confidence)
+2. Processor Pipeline (80% confidence)

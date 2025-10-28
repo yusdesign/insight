@@ -1,21 +1,26 @@
 {
   "name": "insight-monorepo",
+  "workspaces": [
+    "packages/*",
+    "engines/*"
+  ],
   "version": "0.1.0",
   "description": "A suite of intelligent development tools for understanding code",
   "type": "module",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "test": "npm run test --workspaces",
-    "test:point": "npm test --workspace=point.js",
-    "test:hunch": "npm test --workspace=hunch.js",
-    "test:intuition": "npm test --workspace=intuition.js",
-    "test:insight": "npm test --workspace=insight.js",
+    "test:point": "npm test --workspace=@insight-suite/point.js",
+    "test:hunch": "npm test --workspace=@insight-suite/hunch.js",
+    "test:intuition": "npm test --workspace=@insight-suite/intuition.js",
+    "test:insight": "npm test --workspace=@insight-suite/insight.js",
+    "test:js2uml": "npm test --workspace=@insight-suite/js2uml",
     "build": "echo 'No build step needed for now'",
     "dev": "npm run dev --workspaces",
-    "clean": "rm -rf node_modules packages/*/node_modules"
+    "clean": "rm -rf node_modules packages/*/node_modules engines/*/node_modules",
+    "playground:build": "cd archetype && npm install && npm run build:deps",
+    "playground:serve": "cd archetype && npm run serve",
+    "playground:dev": "cd archetype && npm run dev"
   },
   "keywords": [
     "code-analysis",
@@ -37,6 +42,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
+    "mermaid": "^11.12.0",
     "nanospinner": "^1.2.2"
   }
 }

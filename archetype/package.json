@@ -1,0 +1,26 @@
+{
+  "name": "insight-suite-playground",
+  "version": "1.0.0",
+  "description": "Self-contained web playground for Insight Suite",
+  "type": "module",
+  "scripts": {
+    "build:deps": "mkdir -p libs && cp node_modules/mermaid/dist/mermaid.min.js libs/",
+    "prepare": "npm run build:deps",
+    "serve": "npx http-server -p 3000",
+    "dev": "npx live-server ."
+  },
+  "dependencies": {
+    "mermaid": "^11.12.0"
+  },
+  "keywords": [
+    "code-analysis",
+    "visualization",
+    "playground"
+  ],
+  "author": "yusdesign",
+  "license": "MIT",
+  "main": "app.js",
+  "directories": {
+    "example": "examples"
+  }
+}

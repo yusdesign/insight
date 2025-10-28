@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Insight Suite Analysis - validation</title></head>
+<body>
+    <h1>Insight Suite Analysis - validation</h1>
+    <img src="https://www.plantuml.com/plantuml/png/pLNDRXCn4BxlKuo4K44bKTIchHH5KKCQf4Lj4h999KGuEBlJNQED7Mnl8E97N3W21pWXK14lm9NdwGlGHs2ykodTX5P21OdBsfxvnj_dySnwLnkcJ3A97STm4oFSzJQ61_kmXpY5fc3nN7Cz4dsS8Okv2A4b0uI1Ian4PcSDUiD-h-krQp0ZVy0Cbs8arg3LxTnnzzgT5dcsgkNATMliDGU3Th_ZrI14WOh5jSgj1tBy27q3tNHuQ67tXirzTt0VNCyRjWbSiKQtCnYw0xVR0Q_LxTEkbV9cjLhPsTxOgkniRLQtjo-Jynlcgp7vCTCQXXgLXsh6VOHd3a2v33qbfwWCHqshaG0e9GJgurHgRgIQ4wg44yRZFCwkOnc6gEpCPtwKccoG7NyTmwvua8Oh9PLE0r649hApagKYUbSOL4UCz6JiwxuKsgZ49-uRDmcv7gAnic_FtI0pyADiz9dnetoga1cqi1oY3wsEHKGkAWNiCSCAeBOzN6efYg9QedonSA7ivRbDeLxdEQRHI9sh5AkO8k6I_uMJtz7XMGRRDcyNtvDWapJrr14cqRRE_o2nPtHMx9Xf_CTaowSgbPut89lQF4IekD6DnhLG8GgdAEfoxFcQBfSRA_chrxFg-9iHHNrNnpj26eInD4PEG1wTxrDAyycdrz1KViGD_N4IXU0PbJQIhjbadxpw2Xq9-3GlsW2dA08KFbtVID0KxExB54k7lYfDvc_5o0JO6a6OC47DCq5XYjvfCewv3tnHCXTBB6Jjln3en1ZQXU9XP4ZHwV67DrJysYx1IqZOyaDaCUy_WnV99veKKSyf360Tw7zfXuNOLC77Bp--lmF8tYuD4Gz8_SenJe_VVYkcuN52Tsdcf3WLabrwfjHnTkbBp-LF" alt="UML Diagram">
+    <p><a href="https://www.plantuml.com/plantuml/umla/pLNDRXCn4BxlKuo4K44bKTIchHH5KKCQf4Lj4h999KGuEBlJNQED7Mnl8E97N3W21pWXK14lm9NdwGlGHs2ykodTX5P21OdBsfxvnj_dySnwLnkcJ3A97STm4oFSzJQ61_kmXpY5fc3nN7Cz4dsS8Okv2A4b0uI1Ian4PcSDUiD-h-krQp0ZVy0Cbs8arg3LxTnnzzgT5dcsgkNATMliDGU3Th_ZrI14WOh5jSgj1tBy27q3tNHuQ67tXirzTt0VNCyRjWbSiKQtCnYw0xVR0Q_LxTEkbV9cjLhPsTxOgkniRLQtjo-Jynlcgp7vCTCQXXgLXsh6VOHd3a2v33qbfwWCHqshaG0e9GJgurHgRgIQ4wg44yRZFCwkOnc6gEpCPtwKccoG7NyTmwvua8Oh9PLE0r649hApagKYUbSOL4UCz6JiwxuKsgZ49-uRDmcv7gAnic_FtI0pyADiz9dnetoga1cqi1oY3wsEHKGkAWNiCSCAeBOzN6efYg9QedonSA7ivRbDeLxdEQRHI9sh5AkO8k6I_uMJtz7XMGRRDcyNtvDWapJrr14cqRRE_o2nPtHMx9Xf_CTaowSgbPut89lQF4IekD6DnhLG8GgdAEfoxFcQBfSRA_chrxFg-9iHHNrNnpj26eInD4PEG1wTxrDAyycdrz1KViGD_N4IXU0PbJQIhjbadxpw2Xq9-3GlsW2dA08KFbtVID0KxExB54k7lYfDvc_5o0JO6a6OC47DCq5XYjvfCewv3tnHCXTBB6Jjln3en1ZQXU9XP4ZHwV67DrJysYx1IqZOyaDaCUy_WnV99veKKSyf360Tw7zfXuNOLC77Bp--lmF8tYuD4Gz8_SenJe_VVYkcuN52Tsdcf3WLabrwfjHnTkbBp-LF" target="_blank">Open in PlantUML Editor</a></p>
+    <pre>@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: validation\n' CONFIDENCE: 54.0%\n' PATTERNS: general:0,[object Object]\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 0.344076250753466\n
+' PURPOSE: validation\n' PATTERNS: general:0\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 0.344076250753466\n
+class UserService {
+  .. Properties ..\n  -userRepository
+  -emailService
+  -logger
+  -cache
+  -user
+  -validation
+  -id
+  -errors
+  -length
+  --\n  .. Interface ..\n  +constructor()
+  +getUserById()
+  +if()
+  +catch()
+  +createUser()
+  +isValidId()
+  +validateUserData()
+  +isValidEmail()
+  --\n  .. Internal Usage ..\n  ~isValidId() <<internal>>\n  ~validateUserData() <<internal>>\n  ~isValidEmail() <<internal>>\n}
+
+class ValidationError {
+  .. Properties ..\n  -name
+  -statusCode
+  --\n  .. Interface ..\n  +constructor()
+}
+
+class DatabaseError {
+  .. Properties ..\n  -name
+  -statusCode
+  --\n  .. Interface ..\n  +constructor()
+}
+
+ValidationError --|> Error <<inherits>>#green
+DatabaseError --|> Error <<inherits>>#green
+UserService ..> ValidationError <<creates>>#green
+UserService ..> ValidationError <<creates>>#green
+UserService ..> DatabaseError <<creates>>#green
+UserService ..> DatabaseError <<creates>>#green
+
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • No external dependencies\nend note
+note bottom of ValidationError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of DatabaseError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml</pre>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# layeredArchitecture
+
+```mermaid
+classDiagram
+    %% 3 classes
+    direction LR
+
+    class UserController {
+        +constructor()
+    }
+    class UserService {
+        +constructor()
+    }
+    class UserRepository {
+        +constructor()
+    }
+    UserController --> OtherClass
+    UserService --> OtherClass
+    UserRepository --> OtherClass
+
+```
+
+*Insight.js Analysis*
+Components: 3 | Methods: 3 | Quality: 85%

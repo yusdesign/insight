@@ -1,0 +1,32 @@
+============================================================
+INSIGHT SUITE ARCHITECTURE ANALYSIS
+============================================================
+
+Purpose: communication
+Intuition Score: 72.0%
+Patterns Found: 2
+Anomalies: 2
+
+┌─ DataPipeline ──────────────────────┐
+│ cache                                │
+│ cacheKey                             │
+│ result                               │
+│ addStage()                           │
+│ process()                            │
+│ for()                                │
+│ generateCacheKey()                   │
+┌─ External_APIs ─────────────────────┐
+│ .. Global APIs ..  +console.*  +JSON.*  +Math.*  +Promise.*  <<external>>} │
+│ 🔍 Insight Suite Deep Analysis  📝 Shows declared + used + external  ⚠️  Reveals hidden dependencies  🎯 Architecture quality insightsendlegend │
+
+────────────────────────────────────────
+ANOMALIES REQUIRING ATTENTION:
+────────────────────────────────────────
+1. Memory: Potential memory leak in cache
+2. Validation: Missing input validation
+
+────────────────────────────────────────
+ARCHITECTURE PATTERNS:
+────────────────────────────────────────
+1. Repository Pattern (90% confidence)
+2. Processor Pipeline (80% confidence)

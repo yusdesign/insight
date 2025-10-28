@@ -1,0 +1,31 @@
+@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: Service Layer\n' PATTERNS: Repository Pattern\n' QUALITY ISSUES: 0\n' INTUITION SCORE: N/A\n
+class UserService {
+  .. Properties ..\n  -users
+  -user
+  --\n  .. Interface ..\n  +constructor()
+  +getUser()
+  +fetchUser()
+  +addUser()
+  --\n  .. Internal Usage ..\n  ~fetchUser() <<internal>>\n}
+
+class User {
+  .. Properties ..\n  -id
+  -name
+  --\n  .. Interface ..\n  +constructor()
+  +validate()
+}
+
+UserService ..> User <<creates>>#green
+
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\nend note
+note bottom of User
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml

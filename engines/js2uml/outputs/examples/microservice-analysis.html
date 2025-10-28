@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Insight Suite Analysis - validation</title></head>
+<body>
+    <h1>Insight Suite Analysis - validation</h1>
+    <img src="https://www.plantuml.com/plantuml/png/NLAnZjD04EttAwO3T2H2ro15fzD5HmgZ8mvUkq2OOi-Us8kSNRCx3aG8T0qbK425G21-W9RlkH-0Js3MJiGbZNVspSnxRyTpvaavwbQD4AIfGNWeZxD75_00iOMfKSt6Qv-R1DUe6cqgEBSbGkewgXaMjs2H9OjOpYQmvdofI5kJ6uQdQJfBvd82J-tbSom8ulvuTlSG2DMFi-b5b3w1ICfinZt70OpcQHQbKJm7UHudh71lV9yJecYKzn2x4fr4jzO5mci1C1x3mjaM7MdqVCiDmCY6gWHRwpLPj-6oKQisApIqRGt8V-StycBN7G9qpZeVeWPDHNM8Ha60HID3w9QANGoQHuKrdbnNiE3jEo803XLXRtW0je8t8RtiptrM7ZzaNbKxwhS7ZN1oehTrfwUvUIE4C9OGBYsHNO5Txas9wQ-_leEfAsfDFFdE8KXo_OFy9F1VN_s4kGLyjTKkiKLJeYbuehdX40Az40rMuU9qLOSv_Vt--JqRzk4AicFom_K9DP--WQpjIy-i_0STbd04dU-FdM3luSkFFxy_0WmRvw7M9Jiui1BuFlpQVygBZeT36z23aS7mu5I8C_xoaly3" alt="UML Diagram">
+    <p><a href="https://www.plantuml.com/plantuml/umla/NLAnZjD04EttAwO3T2H2ro15fzD5HmgZ8mvUkq2OOi-Us8kSNRCx3aG8T0qbK425G21-W9RlkH-0Js3MJiGbZNVspSnxRyTpvaavwbQD4AIfGNWeZxD75_00iOMfKSt6Qv-R1DUe6cqgEBSbGkewgXaMjs2H9OjOpYQmvdofI5kJ6uQdQJfBvd82J-tbSom8ulvuTlSG2DMFi-b5b3w1ICfinZt70OpcQHQbKJm7UHudh71lV9yJecYKzn2x4fr4jzO5mci1C1x3mjaM7MdqVCiDmCY6gWHRwpLPj-6oKQisApIqRGt8V-StycBN7G9qpZeVeWPDHNM8Ha60HID3w9QANGoQHuKrdbnNiE3jEo803XLXRtW0je8t8RtiptrM7ZzaNbKxwhS7ZN1oehTrfwUvUIE4C9OGBYsHNO5Txas9wQ-_leEfAsfDFFdE8KXo_OFy9F1VN_s4kGLyjTKkiKLJeYbuehdX40Az40rMuU9qLOSv_Vt--JqRzk4AicFom_K9DP--WQpjIy-i_0STbd04dU-FdM3luSkFFxy_0WmRvw7M9Jiui1BuFlpQVygBZeT36z23aS7mu5I8C_xoaly3" target="_blank">Open in PlantUML Editor</a></p>
+    <pre>@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: validation\n' PATTERNS: [object Object], [object Object]\n' QUALITY ISSUES: 2\n' INTUITION SCORE: 0.72\n
+class OrderService {
+  .. Properties ..\n  -orderRepository
+  -paymentService
+  -validation
+  -payment
+  -order
+  -errors
+  -length
+  --\n  .. Interface ..\n  +constructor()
+  +createOrder()
+  +validateOrder()
+  +if()
+  --\n  .. Internal Usage ..\n  ~validateOrder() <<internal>>\n}
+
+
+note bottom of OrderService
+  ✅ Architecture Strengths:\n  • No external dependencies\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml</pre>
+</body>
+</html>

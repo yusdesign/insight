@@ -1,0 +1,108 @@
+import { JS2UMLEngine } from './src/index.js';
+
+// Real-world code that Insight Suite can analyze deeply
+const complexCode = `
+class DataProcessor {
+    constructor() {
+        this.cache = new Map();
+        this.processors = [];
+    }
+    
+    addProcessor(processor) {
+        this.processors.push(processor);
+    }
+    
+    process(data) {
+        if (this.cache.has(data.id)) {
+            return this.cache.get(data.id);
+        }
+        
+        let result = data;
+        for (const processor of this.processors) {
+            result = processor.transform(result);
+        }
+        
+        this.cache.set(data.id, result);
+        return result;
+    }
+}
+
+class ValidationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ValidationError';
+    }
+}
+
+class UserService {
+    constructor() {
+        this.users = new Map();
+        this.dataProcessor = new DataProcessor();
+    }
+    
+    async getUser(id) {
+        if (!id) {
+            throw new ValidationError('ID is required');
+        }
+        
+        const user = this.users.get(id);
+        return this.dataProcessor.process(user);
+    }
+    
+    addUser(user) {
+        this.users.set(user.id, user);
+    }
+}
+`;
+
+async function comprehensiveTest() {
+    console.log('🚀 JS2UML + Insight Suite Comprehensive Integration Test\n');
+    
+    const engine = new JS2UMLEngine();
+    
+    try {
+        const result = await engine.analyzeCodebase(complexCode, 'both');
+        
+        // Display Insight Suite Findings
+        console.log('📊 INSIGHT SUITE ANALYSIS RESULTS:');
+        console.log('='.repeat(50));
+        console.log('Purpose:', result.insights.purpose.type);
+        console.log('Confidence:', result.insights.purpose.confidence);
+        console.log('Intuition Score:', result.insights.intuitionScore);
+        console.log('Patterns Found:', result.insights.patterns.length);
+        console.log('Anomalies Detected:', result.insights.anomalies.length);
+        
+        // Show ASCII preview
+        console.log('\n📋 ASCII ARCHITECTURE OVERVIEW:');
+        console.log('='.repeat(50));
+        console.log(result.visualizations.ascii);
+        
+        // Save full visualizations
+        const fs = await import('fs');
+        fs.mkdirSync('./outputs', { recursive: true });
+        
+        fs.writeFileSync('./outputs/insight-analysis.html', result.visualizations.plantuml);
+        fs.writeFileSync('./outputs/insight-analysis.txt', result.visualizations.ascii);
+        fs.writeFileSync('./outputs/insight-analysis-enhanced.puml', result.visualizations.enhanced);
+        
+        console.log('💾 Saved visualizations:');
+        console.log('  • outputs/insight-analysis.html (PlantUML)');
+        console.log('  • outputs/insight-analysis.txt (ASCII)');
+        console.log('  • outputs/insight-analysis-enhanced.puml (Enhanced)');
+        
+        // Display key recommendations
+        if (result.recommendations.length > 0) {
+            console.log('\n🎯 ARCHITECTURE RECOMMENDATIONS:');
+            console.log('='.repeat(50));
+            result.recommendations.forEach((rec, index) => {
+                console.log(`${index + 1}. ${rec}`);
+            });
+        }
+        
+    } catch (error) {
+        console.log('💥 Integration Error:', error.message);
+        console.log('Stack:', error.stack);
+    }
+}
+
+comprehensiveTest();

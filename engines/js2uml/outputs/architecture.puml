@@ -1,0 +1,38 @@
+@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: service\n' CONFIDENCE: 85.0%\n' PATTERNS: repository, caching\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 76.5\n
+' PURPOSE: service\n' PATTERNS: unknown, unknown\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 76.5\n
+class UserService {
+  .. Properties ..\n  -userRepo
+  -cache
+  -user
+  --\n  .. Interface ..\n  +constructor()
+  +getUser()
+  +createUser()
+  +validateData()
+  +notifyAnalytics()
+  --\n  .. Internal Usage ..\n  ~validateData() <<internal>>\n  ~notifyAnalytics() <<internal>>\n  --\n  .. External Dependencies ..\n  #console.log <<external>>\n}
+
+class UserRepository {
+  .. Properties ..\n  -db
+  -id
+  --\n  .. Interface ..\n  +constructor()
+  +find()
+  +create()
+}
+
+class External_APIs {
+  .. Global APIs ..\n  +console.*\n  +JSON.*\n  +Math.*\n  +Promise.*\n  <<external>>\n}
+
+UserService ..> External APIs <<external>> #red#gray
+
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • Clean state management\nend note
+note bottom of UserRepository
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml

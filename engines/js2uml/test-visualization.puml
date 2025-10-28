@@ -1,0 +1,46 @@
+@startuml
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: validation\n' CONFIDENCE: 54.0%\n' PATTERNS: service, validation\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 34.4\n
+' PURPOSE: validation\n' PATTERNS: unknown, unknown\n' QUALITY ISSUES: 0\n' INTUITION SCORE: 34.4\n
+class UserService {
+  .. Properties ..\n  -userRepository
+  -cache
+  -user
+  -id
+  --\n  .. Interface ..\n  +constructor()
+  +getUserById()
+  +createUser()
+  +isValidId()
+  +validateUserData()
+  +isValidEmail()
+  --\n  .. Internal Usage ..\n  ~isValidId() <<internal>>\n  ~validateUserData() <<internal>>\n  ~isValidEmail() <<internal>>\n}
+
+class ValidationError {
+  .. Properties ..\n  -name
+  --\n  .. Interface ..\n  +constructor()
+}
+
+class DatabaseError {
+  .. Properties ..\n  -name
+  --\n  .. Interface ..\n  +constructor()
+}
+
+ValidationError --|> Error <<inherits>>#green
+DatabaseError --|> Error <<inherits>>#green
+UserService ..> ValidationError <<creates>>#green
+UserService ..> ValidationError <<creates>>#green
+UserService ..> ValidationError <<creates>>#green
+UserService ..> DatabaseError <<creates>>#green
+
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\nend note
+note bottom of ValidationError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of DatabaseError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml

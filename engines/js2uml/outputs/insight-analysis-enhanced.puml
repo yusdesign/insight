@@ -1,0 +1,57 @@
+@startuml
+
+' === INSIGHT SUITE ANALYSIS ===
+
+
+title JS2UML Deep Analysis\nRevealing Code Truths\n
+' PURPOSE: validation\n' PATTERNS: [object Object], [object Object]\n' QUALITY ISSUES: 2\n' INTUITION SCORE: 0.72\n
+class DataProcessor {
+  .. Properties ..\n  -cache
+  -processors
+  -result
+  --\n  .. Interface ..\n  +constructor()
+  +addProcessor()
+  +process()
+  +for()
+}
+
+class ValidationError {
+  .. Properties ..\n  -name
+  --\n  .. Interface ..\n  +constructor()
+}
+
+class UserService {
+  .. Properties ..\n  -users
+  -dataProcessor
+  -user
+  --\n  .. Interface ..\n  +constructor()
+  +getUser()
+  +addUser()
+}
+
+ValidationError --|> Error <<inherits>>#green
+UserService ..> DataProcessor <<creates>>#green
+UserService ..> ValidationError <<creates>>#green
+
+note bottom of DataProcessor
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of ValidationError
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+note bottom of UserService
+  ✅ Architecture Strengths:\n  • No external dependencies\n  • Clean state management\n  • Clean public interface\nend note
+
+legend right
+  🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend
+
+@enduml' PURPOSE: validation
+' DESCRIPTION: Code that validates input data or conditions
+' CONFIDENCE: 54.0%
+' INTUITION SCORE: 0.72
+
+' 🚨 DETECTED ANOMALIES:
+' • Memory: Potential memory leak in cache
+' • Validation: Missing input validation
+
+' 🎯 ARCHITECTURE PATTERNS:
+' • Repository Pattern (90% confidence)
+' • Processor Pipeline (80% confidence)

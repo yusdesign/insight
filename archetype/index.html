@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insight Suite Playground</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="libs/mermaid.min.js"></script>
+    <script>
+        // Initialize local Mermaid
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.mermaid) {
+                mermaid.initialize({ 
+                    startOnLoad: true,
+                    theme: 'default',
+                    securityLevel: 'loose',
+                    flowchart: { 
+                        useMaxWidth: false,
+                        htmlLabels: true,
+                        curve: 'basis'
+                    }
+                });
+                console.log('🎯 Local Mermaid 11.12.0 initialized');
+            } else {
+                console.error('❌ Local Mermaid failed to load');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Insight Suite Playground</h1>
+            <p>From <code>point → hunch → intuition → insight</code></p>
+        </header>
+
+        <div class="progression-tracker">
+            <div class="stage point" data-stage="point">
+                <div class="stage-emoji">🎯</div>
+                <div class="stage-name">PointJS</div>
+                <div class="stage-confidence">0%</div>
+            </div>
+            <div class="stage hunch" data-stage="hunch">
+                <div class="stage-emoji">🤔</div>
+                <div class="stage-name">HunchJS</div>
+                <div class="stage-confidence">0%</div>
+            </div>
+            <div class="stage intuition" data-stage="intuition">
+                <div class="stage-emoji">🔗</div>
+                <div class="stage-name">IntuitionJS</div>
+                <div class="stage-confidence">0%</div>
+            </div>
+            <div class="stage insight" data-stage="insight">
+                <div class="stage-emoji">🌌</div>
+                <div class="stage-name">InsightJS</div>
+                <div class="stage-confidence">0%</div>
+            </div>
+            <div class="stage archetype" data-stage="archetype">
+                <div class="stage-emoji">🔍</div>
+                <div class="stage-name">Archetype</div>
+                <div class="stage-confidence">0%</div>
+            </div>
+        </div>
+
+        <div class="playground">
+            <div class="input-panel">
+                <div class="panel-header">
+                    <h3>Code Input</h3>
+                    <div class="controls">
+                        <select id="analysisType">
+                            <option value="full">Full Analysis</option>
+                            <option value="point">PointJS Only</option>
+                            <option value="hunch">HunchJS Only</option>
+                            <option value="intuition">IntuitionJS Only</option>
+                            <option value="insight">InsightJS Only</option>
+                            <option value="archetype">Archetype Only</option>
+                        </select>
+                        <select id="exampleSelector">
+                            <option value="">Choose Example...</option>
+                            <option value="builder">Builder Pattern</option>
+                            <option value="factory">Factory Pattern</option>
+                            <option value="async">Async Service</option>
+                            <option value="repository">Repository Pattern</option>
+                        </select>
+                    </div>
+                </div>
+                <textarea id="codeInput" placeholder="Enter your JavaScript code here..."></textarea>
+                <button id="analyzeBtn" onclick="analyzeCode()">🚀 Analyze Code</button>
+            </div>
+
+            <div class="output-panel">
+                <div class="panel-header">
+                    <h3>Analysis Results</h3>
+                    <div class="confidence-badge">
+                        Overall Confidence: <span id="overallConfidence">0%</span>
+                    </div>
+                </div>
+                <div id="results">
+                    <div class="welcome-message">
+                        <h4>Welcome to Insight Suite! 👋</h4>
+                        <p>Enter code or select an example to begin analysis.</p>
+                        <p>Watch as your code progresses through the Insight Suite pipeline:</p>
+                        <ul>
+                            <li><strong>🎯 PointJS</strong>: Detect code purpose and goals</li>
+                            <li><strong>🤔 HunchJS</strong>: Find patterns and anomalies</li>
+                            <li><strong>🔗 IntuitionJS</strong>: Learn and predict patterns</li>
+                            <li><strong>🌌 InsightJS</strong>: Holistic analysis and wisdom</li>
+                            <li><strong>🔍 Archetype</strong>: Discover architectural patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization-panel">
+            <h3>Analysis Flow</h3>
+            <div id="mermaidChart" class="mermaid">
+                flowchart TD
+                    A[Welcome to Insight Suite!] --> B[Select an Example]
+                    B --> C[Or Write Your Own Code]
+                    C --> D[Click Analyze]
+                    D --> E[Watch the Magic Happen!]
+            
+                    style A fill:#e1f5fe
+                    style E fill:#c8e6c9
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

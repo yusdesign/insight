@@ -1,0 +1,24 @@
+# factory
+
+```mermaid
+classDiagram
+    %% 3 classes
+    direction LR
+
+    class VehicleFactory {
+        +constructor()
+    }
+    class Car {
+        +constructor()
+    }
+    class Bike {
+        +constructor()
+    }
+    VehicleFactory --> OtherClass
+    Car --> OtherClass
+    Bike --> OtherClass
+
+```
+
+*Intuition.js Analysis*
+Prediction: data-processing | Confidence: 22.0%

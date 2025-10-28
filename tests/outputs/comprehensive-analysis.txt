@@ -1,0 +1,35 @@
+============================================================
+INSIGHT SUITE ARCHITECTURE ANALYSIS
+============================================================
+
+Purpose: validation
+Intuition Score: 34.4%
+Patterns Found: undefined
+Anomalies: undefined
+
+┌─ UserService ───────────────────────┐
+│ emailService                         │
+│ logger                               │
+│ cache                                │
+│ user                                 │
+│ validation                           │
+│ id                                   │
+│ errors                               │
+│ length                               │
+│ getUserById()                        │
+│ if()                                 │
+│ catch()                              │
+│ createUser()                         │
+│ isValidId()                          │
+│ validateUserData()                   │
+│ isValidEmail()                       │
+┌─ ValidationError ───────────────────┐
+│ statusCode                           │
+└──────────────────────────────────────┘
+
+┌─ DatabaseError ─────────────────────┐
+│ statusCode                           │
+└──────────────────────────────────────┘
+
+  ValidationError → Error (inheritance)
+  DatabaseError → Error (inheritance)

@@ -1,0 +1,30 @@
+{
+  "name": "@insight-suite/js2uml",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Insight Suite visualization engine - Mermaid architecture diagrams + ASCII views",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./core": "./src/core/UMLGenerator.js",
+    "./visualizers": "./src/visualizers/index.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node tests/test-components.js",
+    "test:all": "npm run test && npm run test:visualization",
+    "test:visualization": "node tests/visualization.test.js",
+    "examples": "node examples/real-world-analysis.js",
+    "clean": "rm -rf node_modules package-lock.json",
+    "dev": "npm run build && node --watch examples/real-world-analysis.js"
+  },
+  "dependencies": {
+    "mermaid": "^11.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "workspaces": [
+    "../../packages/*"
+  ]
+}

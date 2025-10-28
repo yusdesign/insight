@@ -1,0 +1,13 @@
+
+@startuml
+class HelloWorld {
+  -message: string
+  +constructor()
+  +sayHello(): string
+}
+
+note right of HelloWorld
+  Simple test class
+  for PlantUML verification
+end note
+@enduml

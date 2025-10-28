@@ -1,0 +1,23 @@
+============================================================
+INSIGHT SUITE ARCHITECTURE ANALYSIS
+============================================================
+
+Purpose: Data Processing
+Intuition Score: 72.0%
+Patterns Found: 2
+Anomalies: 2
+
+┌─ DataProcessor ─────────────────────┐
+│ .. Properties ..\n  -cache     │
+│ -item                          │
+│ --\n  .. Interface ..\n  +constructor() │
+│ +process()                     │
+│ +transform()                   │
+│ --\n  .. Internal Usage ..\n  ~transform() <<internal>>\n} │
+│ 🔍 Insight Suite Deep Analysis\n  📝 Shows declared + used + external\n  ⚠️  Reveals hidden dependencies\n  🎯 Architecture quality insights\nendlegend │
+
+────────────────────────────────────────
+ANOMALIES REQUIRING ATTENTION:
+────────────────────────────────────────
+1. Memory: Potential memory leak in cache
+2. Validation: Missing input validation

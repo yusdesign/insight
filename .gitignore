@@ -6,8 +6,19 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build outputs
+labs/
+dist/
+build/
+archetype/dist/
+archetype/build/
+archetype/node_modules/
 packages/*/dist/
 packages/*/build/
+*.min.js
+*.bundle.js
+
+# Bundle
+!archetype/libs/mermaid.min.js
 
 # Coverage reports
 coverage/
@@ -16,6 +27,9 @@ packages/*/coverage/
 # Environment variables
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # IDE files
 .vscode/
@@ -39,3 +53,6 @@ lerna-debug.log*
 *.jtson
 *.sh
 /backup/
+tmp/
+temp/
+

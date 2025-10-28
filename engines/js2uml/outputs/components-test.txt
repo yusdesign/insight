@@ -1,0 +1,17 @@
+┌────────────────────────────────────────┐
+│           ARCHITECTURE DIAGRAM         │
+└────────────────────────────────────────┘
+
+┌─ Calculator ──────────────────────────┐
+│ Methods:
+│ ◉ constructor()
+└────────────────────────────────────────┘
+RELATIONSHIPS:
+──────────────
+Calculator ──────> OtherClass
+
+INSIGHTS:
+─────────
+• Total Classes: 1
+• Total Methods: 1
+• Quality Score: 85%

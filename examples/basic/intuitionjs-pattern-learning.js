@@ -1,328 +1,206 @@
 /**
- * Intuition.js Pattern Learning Example
- * 
- * Demonstrates code pattern learning, relationship analysis,
- * and similarity detection using the intuition.js cognitive layer.
+ * Intuition.js Pattern Learning Example with JS2UML Visualization
+ * Using actual API methods: predict(), getSimilarityScore(), learnPatterns()
  */
 
-import IntuitionJS from 'intuition.js';
+import IntuitionJS from '@insight-suite/intuition.js';
+import { analyze, generateReport } from '@insight-suite/js2uml';
 
-// Create intuition.js instance optimized for learning
+// Create intuition.js instance
 const intuition = new IntuitionJS({
-  learningRate: 0.15,          // Balanced learning speed
-  confidenceThreshold: 0.6,    // Reasonable pattern recognition
+  learningRate: 0.15,
   debug: false
 });
 
-// Training examples for different pattern categories
-const trainingExamples = {
-  validation: [
-    `function validateEmail(email) {
-      const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      return regex.test(email);
-    }`,
-    
-    `function checkPassword(password) {
-      return password.length >= 8 && 
-             /[A-Z]/.test(password) && 
-             /[0-9]/.test(password);
-    }`,
-    
-    `function verifyAge(age) {
-      return age >= 18 && age <= 120;
-    }`
-  ],
+// Pattern examples
+const patternExamples = {
+  singleton: `
+    class Config {
+      static instance;
+      static getInstance() {
+        if (!Config.instance) {
+          Config.instance = new Config();
+        }
+        return Config.instance;
+      }
+    }
+  `,
   
-  calculation: [
-    `function calculateArea(width, height) {
-      return width * height;
-    }`,
-    
-    `function computeVolume(length, width, height) {
-      return length * width * height;
-    }`,
-    
-    `function getTotalPrice(price, quantity, taxRate) {
-      return (price * quantity) * (1 + taxRate);
-    }`
-  ],
+  factory: `
+    class VehicleFactory {
+      createVehicle(type) {
+        switch(type) {
+          case 'car': return new Car();
+          case 'bike': return new Bike();
+        }
+      }
+    }
+    class Car {}
+    class Bike {}
+  `,
   
-  transformation: [
-    `function formatUserName(user) {
-      return user.name.trim().toLowerCase();
-    }`,
+  observer: `
+    class EventEmitter {
+      constructor() {
+        this.listeners = new Map();
+      }
+      
+      on(event, callback) {
+        if (!this.listeners.has(event)) {
+          this.listeners.set(event, []);
+        }
+        this.listeners.get(event).push(callback);
+      }
+      
+      emit(event, data) {
+        if (this.listeners.has(event)) {
+          this.listeners.get(event).forEach(callback => callback(data));
+        }
+      }
+    }
+  `,
+  
+  validation: `
+    function validateEmail(email) { 
+      return /^[^@]+@[^@]+\\.[^@]+$/.test(email); 
+    }
     
-    `function processDataItems(items) {
-      return items
-        .filter(item => item.active)
-        .map(item => ({ ...item, processed: true }))
-        .sort((a, b) => a.id - b.id);
-    }`,
-    
-    `function normalizeText(input) {
-      return input
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, ' ')
-        .trim();
-    }`
-  ]
+    function checkPassword(pwd) { 
+      return pwd.length >= 8; 
+    }
+  `
 };
 
 async function demonstratePatternLearning() {
-  console.log('🧠 Intuition.js - Pattern Learning & Relationship Analysis');
+  console.log('🧠 Intuition.js - Pattern Learning with Visualization');
   console.log('='.repeat(65));
   
-  // Train the system with examples
-  console.log('\n🎓 TRAINING PHASE: Learning patterns from examples\n');
-  
-  let allExamples = [];
-  let allLabels = {};
-  let index = 0;
-  
-  for (const [category, examples] of Object.entries(trainingExamples)) {
-    examples.forEach(example => {
-      allExamples.push(example);
-      allLabels[index] = `${category}-pattern`;
-      index++;
-    });
+  // Test prediction on each example
+  for (const [patternName, code] of Object.entries(patternExamples)) {
+    console.log(`\n🔍 Testing ${patternName} pattern...\n`);
+    
+    try {
+      // Use predict() method for pattern detection
+      const prediction = await intuition.predict(code);
+      
+      console.log(`🎯 Pattern Prediction:`);
+      console.log(`  - Prediction: ${prediction.prediction || 'Unknown pattern'}`);
+      console.log(`  - Confidence: ${(prediction.confidence * 100).toFixed(1)}%`);
+      
+      // Architecture visualization for class-based patterns
+      if (code.includes('class ')) {
+        const umlAnalysis = await analyze(code, {
+          options: { format: ['mermaid', 'ascii'] }
+        });
+        
+        console.log('\n📋 Architecture:');
+        console.log(umlAnalysis.ascii);
+        
+        console.log(`\n🏗️ Structure: ${umlAnalysis.classes.length} classes, ${umlAnalysis.relationships.length} relationships`);
+        
+        // Manual pattern detection based on code structure
+        detectPatternManually(patternName, code, umlAnalysis);
+        
+        // Save outputs for class-based patterns
+        const fs = await import('fs');
+        const mermaidContent = `# ${patternName}\n\n\`\`\`mermaid\n${umlAnalysis.mermaid}\n\`\`\`\n\n*Intuition.js Analysis*\nPrediction: ${prediction.prediction} | Confidence: ${(prediction.confidence * 100).toFixed(1)}%`;
+        fs.writeFileSync(`./outputs/basic-examples/intuition-${patternName}.mermaid`, mermaidContent);
+        
+        console.log(`💾 Saved: outputs/basic-examples/intuition-${patternName}.mermaid`);
+      } else {
+        console.log(`\n📝 Function-based pattern (no UML diagram)`);
+      }
+      
+    } catch (error) {
+      console.error(`❌ Analysis failed:`, error.message);
+    }
+    
+    console.log('─'.repeat(50));
   }
   
-  const trainingResult = await intuition.learnPatterns(allExamples, allLabels);
+  // Test similarity scoring
+  await demonstrateSimilarityAnalysis();
   
-  console.log(`✅ Learned ${trainingResult.learnedPatterns} patterns`);
-  console.log(`📊 Training Confidence: ${(trainingResult.confidence * 100).toFixed(1)}%`);
+  // Test pattern learning
+  await demonstratePatternLearningTraining();
+}
+
+function detectPatternManually(patternName, code, umlAnalysis) {
+  console.log(`\n🔍 Manual Pattern Detection for ${patternName}:`);
   
-  trainingResult.patterns.forEach(pattern => {
-    console.log(`   - ${pattern.label}: ${pattern.pattern.slice(0, 50)}...`);
+  switch(patternName) {
+    case 'singleton':
+      if (code.includes('static instance') && code.includes('getInstance()')) {
+        console.log('  ✅ Singleton pattern detected: static instance + getInstance method');
+      }
+      break;
+      
+    case 'factory':
+      if (umlAnalysis.classes.length >= 3 && code.includes('create') && code.includes('new ')) {
+        console.log('  ✅ Factory pattern detected: creator method + multiple product classes');
+      }
+      break;
+      
+    case 'observer':
+      if (code.includes('listeners') && (code.includes('on(') || code.includes('emit('))) {
+        console.log('  ✅ Observer pattern detected: listeners + event methods');
+      }
+      break;
+  }
+}
+
+async function demonstrateSimilarityAnalysis() {
+  console.log('\n📊 Similarity Analysis Between Patterns');
+  console.log('─'.repeat(45));
+  
+  const patterns = Object.entries(patternExamples);
+  
+  for (let i = 0; i < Math.min(patterns.length, 3); i++) {
+    for (let j = i + 1; j < Math.min(patterns.length, 4); j++) {
+      const [name1, code1] = patterns[i];
+      const [name2, code2] = patterns[j];
+      
+      try {
+        const similarity = await intuition.getSimilarityScore(code1, code2);
+        console.log(`  ${name1} ↔ ${name2}: ${(similarity.score * 100).toFixed(1)}% similar`);
+      } catch (error) {
+        console.log(`  ${name1} ↔ ${name2}: Similarity analysis unavailable`);
+      }
+    }
+  }
+}
+
+async function demonstratePatternLearningTraining() {
+  console.log('\n🎓 Pattern Learning Training Demo');
+  console.log('─'.repeat(35));
+  
+  // Prepare training data
+  const samples = [];
+  const labels = [];
+  
+  Object.entries(patternExamples).forEach(([patternName, code]) => {
+    samples.push(code);
+    labels.push(patternName);
   });
-}
-
-async function demonstratePatternRecognition() {
-  console.log('\n🔍 PATTERN RECOGNITION: Identifying patterns in new code\n');
   
-  // New code to analyze
-  const testCodes = [
-    {
-      name: 'User Validation',
-      code: `function authenticateUser(user) {
-        return user.verified && user.active && user.emailConfirmed;
-      }`
-    },
-    {
-      name: 'Price Calculation', 
-      code: `function calculateDiscount(originalPrice, discountPercent) {
-        return originalPrice * (1 - discountPercent / 100);
-      }`
-    },
-    {
-      name: 'Data Processing',
-      code: `function transformUserData(users) {
-        return users
-          .map(user => ({ ...user, name: user.name.toUpperCase() }))
-          .filter(user => user.age >= 18);
-      }`
-    },
-    {
-      name: 'Unrelated Code',
-      code: `function logMessage(msg) {
-        console.log(\`[\${new Date().toISOString()}] \${msg}\`);
-      }`
-    }
-  ];
-  
-  for (const test of testCodes) {
-    console.log(`\n📝 Testing: ${test.name}`);
-    console.log('─'.repeat(30));
-    
-    const recognition = await intuition.recognizePatterns(test.code);
-    
-    if (recognition.recognizedPatterns.length > 0) {
-      console.log(`✅ Recognized ${recognition.recognizedPatterns.length} pattern(s)`);
-      
-      recognition.recognizedPatterns.forEach(pattern => {
-        console.log(`   🎯 ${pattern.label}: ${(pattern.confidence * 100).toFixed(1)}% confidence`);
-        console.log(`      (learned from ${pattern.examples} examples)`);
-      });
-      
-      if (recognition.suggestions.length > 0) {
-        console.log('   💡 Suggestions:', recognition.suggestions[0]);
-      }
-    } else {
-      console.log('❌ No patterns recognized - code may be unique or complex');
-    }
-    
-    console.log(`   Overall Confidence: ${(recognition.confidence * 100).toFixed(1)}%`);
-  }
-}
-
-async function demonstrateRelationshipAnalysis() {
-  console.log('\n🔗 RELATIONSHIP ANALYSIS: Finding code connections\n');
-  
-  const codeSnippets = [
-    // Similar validation functions
-    `function checkEmail(email) {
-      return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
-    }`,
-    
-    `function validateEmailFormat(email) {
-      const pattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      return pattern.test(email);
-    }`,
-    
-    // Different but related
-    `function calculateRectangleArea(w, h) {
-      return w * h;
-    }`,
-    
-    // Unrelated
-    `function logError(err) {
-      console.error('ERROR: Relationship analysis failed');
-    }`,
-    
-    // Similar to first two
-    `function isEmailValid(email) {
-      if (!email) return false;
-      return email.includes('@') && email.includes('.');
-    }`
-  ];
-  
-  console.log('Analyzing relationships between 5 code snippets...\n');
-  
-  const relationships = await intuition.findRelationships(codeSnippets);
-  
-  console.log(`📊 Overall Similarity: ${(relationships.overallSimilarity * 100).toFixed(1)}%`);
-  console.log(`🔗 Relationships Found: ${relationships.relationships.length}`);
-  console.log(`🏷️ Clusters Identified: ${relationships.clusters.length}`);
-  
-  if (relationships.relationships.length > 0) {
-    console.log('\n🔍 SIGNIFICANT RELATIONSHIPS:');
-    relationships.relationships
-      .filter(rel => rel.similarity > 0.5)
-      .forEach(rel => {
-        const strength = rel.strength === 'strong' ? '🔴' : 
-                        rel.strength === 'medium' ? '🟡' : '🔵';
-        console.log(`${strength} Snippet ${rel.snippet1} ↔ Snippet ${rel.snippet2}`);
-        console.log(`   Similarity: ${(rel.similarity * 100).toFixed(1)}%`);
-        console.log(`   Type: ${rel.type}`);
-        console.log(`   Strength: ${rel.strength}`);
-      });
-  }
-  
-  if (relationships.clusters.length > 0) {
-    console.log('\n🏷️ CODE CLUSTERS:');
-    relationships.clusters.forEach((cluster, index) => {
-      console.log(`   Cluster ${index + 1}: ${cluster.members.join(', ')}`);
-      console.log(`     Size: ${cluster.size} snippets`);
-      console.log(`     Avg Similarity: ${(cluster.averageSimilarity * 100).toFixed(1)}%`);
-    });
-  }
-}
-
-async function demonstrateSimilarityScoring() {
-  console.log('\n📐 SIMILARITY SCORING: Measuring code resemblance\n');
-  
-  const comparisonPairs = [
-    {
-      name: 'Identical Validation',
-      code1: `function validateUser(user) { return user && user.email; }`,
-      code2: `function validateUser(user) { return user && user.email; }`
-    },
-    {
-      name: 'Similar Calculations', 
-      code1: `function calcArea(w, h) { return w * h; }`,
-      code2: `function calculateArea(width, height) { return width * height; }`
-    },
-    {
-      name: 'Different Purposes',
-      code1: `function saveUser(user) { database.users.insert(user); }`,
-      code2: `function deletePost(id) { database.posts.delete(id); }`
-    },
-    {
-      name: 'Structural Similarity',
-      code1: `function processA(data) { return data.map(x => x * 2).filter(x => x > 10); }`,
-      code2: `function processB(items) { return items.map(i => i + 1).filter(i => i < 5); }`
-    }
-  ];
-  
-  console.log('Similarity Scale:');
-  console.log('🟢 80-100%: Very similar or duplicate code');
-  console.log('🟡 60-79%: Related functionality with shared patterns');
-  console.log('🟠 40-59%: Some shared characteristics');
-  console.log('🔴 0-39%: Mostly unrelated code\n');
-  
-  for (const pair of comparisonPairs) {
-    const similarity = await intuition.getSimilarity(pair.code1, pair.code2);
-    const percent = similarity * 100;
-    
-    let rating, icon;
-    if (percent >= 80) { rating = 'Very Similar'; icon = '🟢'; }
-    else if (percent >= 60) { rating = 'Related'; icon = '🟡'; }
-    else if (percent >= 40) { rating = 'Some Similarity'; icon = '🟠'; }
-    else { rating = 'Unrelated'; icon = '🔴'; }
-    
-    console.log(`${icon} ${pair.name}: ${percent.toFixed(1)}% (${rating})`);
-  }
-}
-
-async function demonstrateRefactoringSuggestions() {
-  console.log('\n💡 REFACTORING SUGGESTIONS: Intelligent code improvements\n');
-  
-  const complexCode = `
-    function handleUserDataProcessing(userInformation) {
-      if (userInformation != null && typeof userInformation === 'object') {
-        if (userInformation.profileDetails != null) {
-          if (userInformation.profileDetails.accountSettings != null) {
-            if (userInformation.profileDetails.accountSettings.communicationPreferences != null) {
-              if (userInformation.profileDetails.accountSettings.communicationPreferences.emailNotifications != null) {
-                return userInformation.profileDetails.accountSettings.communicationPreferences.emailNotifications.enabledFlag;
-              }
-            }
-          }
-        }
-      }
-      return false;
-    }
-  `;
-  
-  console.log('Analyzing complex code for refactoring opportunities...\n');
-  
-  const suggestions = await intuition.suggestRefactoring(complexCode);
-  
-  console.log(`🔧 Refactoring Confidence: ${(suggestions.refactoringConfidence * 100).toFixed(1)}%`);
-  
-  if (suggestions.patterns.length > 0) {
-    console.log('\n🎯 Recognized Patterns:');
-    suggestions.patterns.forEach(pattern => {
-      console.log(`   - ${pattern.label} (${(pattern.confidence * 100).toFixed(1)}% confidence)`);
-    });
-  }
-  
-  if (suggestions.suggestions.length > 0) {
-    console.log('\n💡 Improvement Suggestions:');
-    suggestions.suggestions.forEach((suggestion, index) => {
-      console.log(`   ${index + 1}. ${suggestion}`);
-    });
-  }
-}
-
-// Run all demonstrations
-async function runAllExamples() {
-  await demonstratePatternLearning();
-  await demonstratePatternRecognition();
-  await demonstrateRelationshipAnalysis();
-  await demonstrateSimilarityScoring();
-  await demonstrateRefactoringSuggestions();
-}
-
-// Error handling wrapper
-async function runWithErrorHandling() {
   try {
-    await runAllExamples();
+    const learning = await intuition.learnPatterns(samples, labels);
+    
+    console.log(`✅ Learning completed: ${learning.success !== false ? 'Success' : 'Partial success'}`);
+    console.log(`📚 Learned from ${samples.length} pattern examples`);
+    
+    if (learning.learnedPatterns !== undefined) {
+      console.log(`🧩 Patterns learned: ${learning.learnedPatterns}`);
+    }
+    
+    if (learning.confidence !== undefined) {
+      console.log(`🎯 Learning confidence: ${(learning.confidence * 100).toFixed(1)}%`);
+    }
+    
   } catch (error) {
-    console.error('❌ Example execution failed:', error.message);
+    console.log(`🔶 Pattern learning demo: ${error.message}`);
   }
 }
 
-runWithErrorHandling().catch(error => {
-  console.error('Unexpected error:', error);
-});
+// Run the example
+demonstratePatternLearning().catch(console.error);

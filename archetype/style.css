@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.progression-tracker {
+    display: flex;
+    background: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.stage {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    margin: 0 10px;
+    border-radius: 10px;
+    background: #e9ecef;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.stage.active::before {
+    left: 100%;
+}
+
+.stage-emoji {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+
+.stage-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.stage-confidence {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Stage-specific colors */
+.stage.point { border-left: 4px solid #e74c3c; }
+.stage.hunch { border-left: 4px solid #f39c12; }
+.stage.intuition { border-left: 4px solid #9b59b6; }
+.stage.insight { border-left: 4px solid #3498db; }
+.stage.archetype { border-left: 4px solid #2ecc71; }
+
+.playground {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+select, button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}
+
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+#codeInput {
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    resize: vertical;
+    background: #f8f9fa;
+}
+
+#analyzeBtn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    margin-top: 15px;
+}
+
+.output-panel {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#results {
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.confidence-badge {
+    background: #2ecc71;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.welcome-message h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.welcome-message ul {
+    text-align: left;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.welcome-message li {
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.visualization-panel {
+    padding: 30px;
+    border-top: 1px solid #e9ecef;
+}
+
+#mermaidChart {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Result cards */
+.result-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.result-card h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.confidence-bar {
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #2ecc71);
+    transition: width 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .playground {
+        grid-template-columns: 1fr;
+    }
+    
+    .progression-tracker {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stage {
+        margin: 5px 0;
+    }
+}
